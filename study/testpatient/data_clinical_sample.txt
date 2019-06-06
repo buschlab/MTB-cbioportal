@@ -1,0 +1,7 @@
+#Patient Identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method	Tumor Tissue Site
+#Patient identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method	Tumor Tissue Site
+#STRING	STRING	STRING	STRING	STRING	STRING	STRING
+#1	1	1	1	1	1	1
+PATIENT_ID	SAMPLE_ID	CANCER_TYPE	BIOPSY_SITE	GROUP	ANALYSIS_METHOD	TUMOR_TISSUE_SITE
+Testpatient	Testpatient_01	Breast Carcinoma	Breast	A	WES	Breast
+Testpatient	Testpatient_02	Breast Carcinoma	Liver	B	Oncomine	Liver

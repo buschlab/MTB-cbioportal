@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  cbioportal:
+    restart: unless-stopped
+    image: docker.miracum.org/cbioportal/cbioportal:2.0.0
+    container_name: cbioportal_container
+    environment: 
+      CATALINA_OPTS: '-Xms2g -Xmx4g' 
+    ports:
+     - "8080:8080"
+    volumes:
+     - ./study:/study/
+     - ./config/portal.properties:/cbioportal/portal.properties:ro
+    depends_on:
+     - cbioportal_database
+    networks:
+     - cbioportal_net
+  cbioportal_database:
+    restart: unless-stopped
+    image: mysql:5.7
+    container_name: cbioportal_database_container
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssword1
+      MYSQL_DATABASE: cbioportal
+      MYSQL_USER: cbio
+      MYSQL_PASSWORD: P@ssword1
+    ports:
+     - "3306:3306"
+    volumes:
+     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
+     - ./data/seed-cbioportal_hg19_v2.7.3.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
+     - cbioportal_data:/var/lib/mysql 
+    networks:
+     - cbioportal_net
+
+networks:
+  cbioportal_net: 
+  
+volumes:
+  cbioportal_data:

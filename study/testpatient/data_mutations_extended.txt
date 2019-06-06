@@ -1,0 +1,7 @@
+Hugo_Symbol	Tumor_Sample_Barcode	Variant_Classification	HGVSp_Short	Mutation_Status	Localization	Method
+KRAS	Testpatient_01	Missense_Mutation	G12C	Somatic	Breast Biopsy	WES
+BRAF	Testpatient_01	Missense_Mutation	V600E	Germline	Breast Biopsy	WES
+IDH1	Testpatient_01	Missense_Mutation	R132H	Germline	Breast Biopsy	WES
+IDH1	Testpatient_02	Missense_Mutation	R132H	Germline	Liver Biopsy	Oncomine
+TP53	Testpatient_02	Missense_Mutation	R248	Somatic	Liver Biopsy	Oncomine
+MTOR	Testpatient_02	Missense_Mutation	S2215F	Somatic	Liver Biopsy	Oncomine
