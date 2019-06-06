@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: docker.miracum.org/cbioportal/cbioportal:2.0.0
+    image: docker.miracum.org/cbioportal/cbioportal:2.2.0
     container_name: cbioportal_container
     environment: 
       CATALINA_OPTS: '-Xms2g -Xmx4g' 
