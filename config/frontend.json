@@ -1,0 +1,6 @@
+{
+  "fhirspark": {
+    "host": "docker-bionic",
+    "port": "3001"
+  }
+}

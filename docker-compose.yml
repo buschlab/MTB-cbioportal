@@ -3,21 +3,21 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: docker.miracum.org/cbioportal/cbioportal:3.0.1
-    #build: .
-    #image: cbioportal:3.0.1
+    #image: docker.miracum.org/cbioportal/cbioportal:3.0.1
+    image: cbioportal/cbioportal:my-dev-cbioportal-image
     container_name: cbioportal_container
-    environment: 
-      CATALINA_OPTS: '-Xms2g -Xmx4g' 
     ports:
-     - "8080:8080"
+      - "8080:8080"
     volumes:
      - ./study:/study/
      - ./config/portal.properties:/cbioportal/portal.properties:ro
+     - ./config/frontend.json:/cbioportal/frontend.json:ro
     depends_on:
      - cbioportal_database
+     - cbioportal_session
     networks:
      - cbioportal_net
+    command: /bin/sh -c "java -Xms2g -Xmx4g -Dauthenticate=noauthsessionservice -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -Dfrontend.config=/cbioportal/frontend.json -jar webapp-runner.jar /cbioportal-webapp"
   cbioportal_database:
     restart: unless-stopped
     image: mysql:5.7
@@ -27,14 +27,57 @@ services:
       MYSQL_DATABASE: cbioportal
       MYSQL_USER: cbio
       MYSQL_PASSWORD: P@ssword1
-    ports:
-     - "3306:3306"
     volumes:
      - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
      - ./data/seed-cbioportal_hg19_v2.7.3.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
      - cbioportal_data:/var/lib/mysql 
     networks:
      - cbioportal_net
+  cbioportal_session:
+    restart: unless-stopped
+    image: cbioportal/session-service:latest
+    container_name: cbioportal_session_container
+    environment:
+      - "SERVER_PORT=5000"
+      - "JAVA_OPTS=-Dspring.data.mongodb.uri=mongodb://mongoDB:27017/session-service"
+    volumes:
+      - cbioportal_data:/data/db
+    depends_on:
+      - cbioportal_session_database
+    networks:
+      - cbioportal_net
+  cbioportal_session_database:
+    restart: unless-stopped
+    image: mongo:3.6.6
+    container_name: cbioportal_session_database_container
+    environment:
+      MONGO_INITDB_DATABASE: session_service
+    networks:
+      - cbioportal_net
+  fhirspark:
+    restart: unless-stopped
+    #image: docker.miracum.org/cbioportal/fhirspark:1.0
+    image: nr23730/fhirspark:test
+    container_name: cbioportal_fhirspark
+    ports:
+      - "3001:3001"
+    depends_on:
+      - hapiserver
+    environment:
+      FHIRSPARK_FHIRBASE: http://hapiserver:8080/fhir/
+    networks:
+      - cbioportal_net
+  hapiserver:
+    restart: unless-stopped
+    image: docker.miracum.org/miracum-data/hapi-fhir-jpaserver:7.2.2
+    container_name: cbioportal_fhirspark_hapiserver
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./config/hapi.properties:/hapi-config/hapi.properties:ro
+      - cbioportal_data:/var/lib/jetty/target
+    networks:
+      - cbioportal_net
 
 networks:
   cbioportal_net: 
