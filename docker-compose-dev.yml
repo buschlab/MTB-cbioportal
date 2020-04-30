@@ -4,6 +4,8 @@ services:
   cbioportal:
     restart: unless-stopped
     image: docker.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
+    build:
+      context: services/cbioportal
     container_name: cbioportal_container
     volumes:
      - ./study:/study/
@@ -61,6 +63,8 @@ services:
   fhirspark:
     restart: unless-stopped
     image: docker.miracum.org/cbioportal/fhirspark:${RELEASE:-latest}
+    build:
+      context: services/fhirspark
     container_name: cbioportal_fhirspark
     depends_on:
       - hapiserver
@@ -87,6 +91,8 @@ services:
   nginx:
     restart: unless-stopped
     image: docker.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
+    build:
+      context: services/nginx
     container_name: cbioportal_nginx_container
     ports:
       - "${PORT:-8080}:8080"
