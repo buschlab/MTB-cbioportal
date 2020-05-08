@@ -14,6 +14,9 @@ services:
     depends_on:
      - cbioportal_database
      - cbioportal_session
+    ports:
+      - "5005:5005"
+      - "8081:8080"
     networks:
      - cbioportal_net
     command: /bin/sh -c "java -Xms2g -Xmx4g -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=noauthsessionservice -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
@@ -31,8 +34,7 @@ services:
      - ./data/seed-cbioportal_hg19_v2.7.3.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
      - cbioportal_data:/var/lib/mysql 
     ports:
-      - "5005:5005"
-      - "8081:8080"
+      - "3306:3306"
     networks:
      - cbioportal_net
   cbioportal_session:
