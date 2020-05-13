@@ -94,7 +94,7 @@ services:
     restart: unless-stopped
     image: docker.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
     build:
-      context: services/nginx
+      context: services/cbioproxy
     container_name: cbioportal_nginx_container
     ports:
       - "${PORT:-8080}:8080"
