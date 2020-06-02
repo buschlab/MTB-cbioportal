@@ -7,6 +7,8 @@ services:
     build:
       context: services/cbioportal
     container_name: cbioportal_container
+    environment:
+      DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
     volumes:
      - ./study:/study/
      - ./config/portal.properties:/cbioportal/portal.properties:ro
