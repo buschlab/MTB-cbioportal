@@ -19,6 +19,24 @@ Einzelne Dienste (`cbioportal`, `cbioproxy`, `fhirspark`) können über den Befe
 ```
 neu gebaut werden. Wird das `cbioportal`-Image neu gebaut, sollte unbedingt der `cbioproxy` auch neu gebaut werden.
 
+### Import von Studien
+
+```
+docker-compose run cbioportal metaImport.py -u http://cbioportal:8080 -s /study/testpatient -o
+```
+
+#### Import der öffentlichen Datenbank (optional)
+
+1. Löschen der Datenbank
+```
+echo "drop database cbioportal; create database cbioportal;" | docker exec -i cbioportal_database_container mysql -uroot -pP@ssword1
+```
+
+2. Import der Studiendatenbank
+```
+zcat public-portal-dump.latest.sql.gz | docker exec -i cbioportal_database_container mysql -uroot -pP@ssword1 cbioportal
+```
+
 ## Komponenten
 
 - NGINX Reverse Proxy
