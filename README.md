@@ -46,6 +46,7 @@ zcat public-portal-dump.latest.sql.gz | docker exec -i cbioportal_database_conta
   - Mongo DB
 - FHIRspark
   - HAPI FHIR Server
+  - PostgreSQL Server
 
 ## Ports
 
@@ -59,6 +60,7 @@ zcat public-portal-dump.latest.sql.gz | docker exec -i cbioportal_database_conta
 | Mongo DB | - | 27017 |
 | FHIRspark | /mtb/ | 3001 |
 | HAPI FHIR Server | /fhir/ | 8082 |
+| PostgreSQL Server | - | 5432 |
 
 ## Debugging
 
