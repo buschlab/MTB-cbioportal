@@ -103,6 +103,7 @@ services:
       - "${PORT:-8080}:8080"
     depends_on:
       - cbioportal
+      - fhirspark
     networks:
       - cbioportal_net
 
