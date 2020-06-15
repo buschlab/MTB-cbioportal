@@ -21,7 +21,7 @@ services:
       - "8081:8080"
     networks:
      - cbioportal_net
-    command: /bin/sh -c "java -Xms2g -Xmx4g -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005 -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=noauthsessionservice -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
+    command: /bin/sh -c "java -Xmx4g -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005 -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=noauthsessionservice -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
   cbioportal_database:
     restart: unless-stopped
     image: mysql:5.7
