@@ -1,0 +1,14 @@
+name: Docker build test
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build dev containers
+        run: docker-compose --f docker-compose-dev.yml build
