@@ -1,4 +1,4 @@
-FROM adoptopenjdk/maven-openjdk11:latest as build
+FROM maven:3-openjdk-11 as build
 LABEL maintainer="Niklas Reimer <niklas@nr205.de>"
 
 RUN apt update && apt install git -y
