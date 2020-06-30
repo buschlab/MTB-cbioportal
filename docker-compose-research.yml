@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+  cbioportal:
+    restart: unless-stopped
+    image: cbioportal/cbioportal:latest
+    container_name: cbioportal_container
+    environment:
+      DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
+    volumes:
+     - ./study:/study/
+     - ./config/portal.properties:/cbioportal/portal.properties:ro
+     - ./config/frontend.json:/cbioportal/frontend.json:ro
+    depends_on:
+     - cbioportal_database
+     - cbioportal_session
+    networks:
+     - cbioportal_net
+    command: /bin/sh -c "java -Xms2g -Xmx4g -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=noauthsessionservice -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
+  cbioportal_database:
+    restart: unless-stopped
+    image: mariadb:latest
+    container_name: cbioportal_database_container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
+      MYSQL_DATABASE: cbioportal
+      MYSQL_USER: cbio
+      MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
+    volumes:
+     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
+     - ./data/seed-cbioportal_hg19_v2.7.3.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
+     - cbioportal_data:/var/lib/mysql
+    command:
+     - --character-set-server=latin1
+     - --collation-server=latin1_swedish_ci
+    networks:
+     - cbioportal_net
+  cbioportal_session:
+    restart: unless-stopped
+    image: cbioportal/session-service:latest
+    container_name: cbioportal_session_container
+    environment:
+      SERVER_PORT: 5000
+      JAVA_OPTS: -Dspring.data.mongodb.uri=mongodb://cbioportal_session_database:27017/session-service
+    volumes:
+      - cbioportal_data:/data/db
+    depends_on:
+      - cbioportal_session_database
+    networks:
+      - cbioportal_net
+  cbioportal_session_database:
+    restart: unless-stopped
+    image: mongo:3.7.9
+    container_name: cbioportal_session_database_container
+    environment:
+      MONGO_INITDB_DATABASE: session_service
+    networks:
+      - cbioportal_net
+  nginx:
+    restart: unless-stopped
+    image: docker.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
+    container_name: cbioportal_nginx_container
+    ports:
+      - "${PORT:-8080}:8080"
+    depends_on:
+      - cbioportal
+    networks:
+      - cbioportal_net
+
+networks:
+  cbioportal_net: 
+  
+volumes:
+  cbioportal_data:
