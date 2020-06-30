@@ -41,7 +41,7 @@ zcat public-portal-dump.latest.sql.gz | docker exec -i cbioportal_database_conta
 
 - NGINX Reverse Proxy
 - cBioPortal
-  - MySQL 5.7 Datenbank
+  - MariaDB Datenbank
 - cBioPortal Session Service
   - Mongo DB
 - FHIRspark
@@ -55,7 +55,7 @@ zcat public-portal-dump.latest.sql.gz | docker exec -i cbioportal_database_conta
 | NGINX  | / | 8080 |
 | cBioPortal | / | 8081 |
 | cBioPortal Debugger | - | 5005 |
-| MySQL-Datenbank | - | 3306 |
+| MariaDB-Datenbank | - | 3306 |
 | Session Service | - | 5000 |
 | Mongo DB | - | 27017 |
 | FHIRspark | /mtb/ | 3001 |
