@@ -10,7 +10,6 @@ services:
     volumes:
      - ./study:/study/
      - ./config/portal.properties:/cbioportal/portal.properties:ro
-     - ./config/frontend.json:/cbioportal/frontend.json:ro
     depends_on:
      - cbioportal_database
      - cbioportal_session
