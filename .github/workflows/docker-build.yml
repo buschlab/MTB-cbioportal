@@ -1,4 +1,4 @@
-name: Docker build test
+name: Docker build (care)
 
 on:
   push:
@@ -10,5 +10,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build containers
+      - name: Build care containers
         run: docker-compose --f docker-compose.yml build
