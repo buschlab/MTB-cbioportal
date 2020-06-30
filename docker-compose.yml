@@ -19,7 +19,7 @@ services:
     command: /bin/sh -c "java -Xms2g -Xmx4g -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=noauthsessionservice -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
   cbioportal_database:
     restart: unless-stopped
-    image: mysql:5.7
+    image: mariadb:latest
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
@@ -29,7 +29,10 @@ services:
     volumes:
      - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
      - ./data/seed-cbioportal_hg19_v2.7.3.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
-     - cbioportal_data:/var/lib/mysql 
+     - cbioportal_data:/var/lib/mysql
+    command:
+     - --character-set-server=latin1
+     - --collation-server=latin1_swedish_ci
     networks:
      - cbioportal_net
   cbioportal_session:
@@ -61,9 +64,12 @@ services:
       - hapiserver
     environment:
       FHIRSPARK_FHIRBASE: http://hapiserver:8080/fhir/
-      FHIRSPARK_SENDHL7V2: ${HL7V2ENABLE}
+      FHIRSPARK_SENDHL7V2: ${HL7V2ENABLE:-false}
       FHIRSPARK_HL7V2SERVER: ${HL7V2SERVER}
       FHIRSPARK_HL7V2PORT: ${HL7V2PORT}
+    volumes:
+      - ./data/drugs.json:/drugs.json:ro
+      - ./data/hgnc.csv:/hgnc.csv:ro
     networks:
       - cbioportal_net
   hapiserver:
