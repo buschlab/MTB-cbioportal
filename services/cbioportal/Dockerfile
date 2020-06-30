@@ -55,3 +55,6 @@ ENV PORTAL_HOME=/cbioportal
 
 RUN mkdir -p $PORTAL_WEB_HOME
 RUN unzip /app.war -d  $PORTAL_WEB_HOME
+
+# script for calling dumpPortalInfo.py from docker-compose
+RUN echo "cd /cbioportal/core/src/main/scripts && ./dumpPortalInfo.pl \$1" >> /cbioportal/dumpPortalInfo.sh
