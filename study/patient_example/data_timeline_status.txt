@@ -1,0 +1,2 @@
+PATIENT_ID	START_DATE	STOP_DATE	EVENT_TYPE	STATUS
+Patient_example	118		STATUS	radiographic_progression

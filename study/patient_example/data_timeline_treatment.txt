@@ -1,0 +1,5 @@
+PATIENT_ID	START_DATE	STOP_DATE	EVENT_TYPE	TREATMENT_TYPE	SUBTYPE	AGENT
+Patient_example	125	145	TREATMENT	Medical Therapy	Chemotherapy	Med_X
+Patient_example	145	160	TREATMENT	Medical Therapy		Med_X + Med_Y
+Patient_example	180	210	TREATMENT	Medical Therapy		Med_X + Med_Z
+Patient_example	125	200	TREATMENT	Radiation Therapy	Rad_X	
