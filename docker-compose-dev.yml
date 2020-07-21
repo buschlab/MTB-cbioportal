@@ -157,8 +157,6 @@ services:
       - cbioportal_net
   genomenexus_vep:
     image: docker.miracum.org/cbioportal/genome-nexus-vep:${RELEASE:-latest}
-    build:
-      context: services/genome-nexus-vep
     environment:
       - VEP_ASSEMBLY=GRCh37
     restart: unless-stopped
