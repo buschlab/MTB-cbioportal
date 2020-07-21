@@ -63,6 +63,7 @@ services:
       - "${PORT:-8080}:8080"
     depends_on:
       - cbioportal
+      - genomenexus
     networks:
       - cbioportal_net
   genomenexus:

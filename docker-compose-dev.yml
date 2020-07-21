@@ -130,6 +130,7 @@ services:
     depends_on:
       - cbioportal
       - fhirspark
+      - genomenexus
     networks:
       - cbioportal_net
   genomenexus:
