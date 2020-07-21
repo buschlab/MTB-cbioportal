@@ -13,7 +13,7 @@ sudo docker-compose -f docker-compose-dev.yml up
 
 **Der erste Startvorgang dauert ca. 15 Minuten**, da hierbei initial drei Docker Images gebaut werden. Nachfolgende Startvorgänge sind deutlich schneller.
 
-Einzelne Dienste (`cbioportal`, `cbioproxy`, `fhirspark`) können über den Befehl
+Einzelne Dienste (`cbioportal`, `cbioproxy`, `fhirspark`, `genome-nexus-vep`) können über den Befehl
 ```
 ./build.sh <Dienstname>
 ```
@@ -44,6 +44,9 @@ zcat public-portal-dump.latest.sql.gz | docker exec -i cbioportal_database_conta
   - MariaDB Datenbank
 - cBioPortal Session Service
   - Mongo DB
+- Genome-Nexus
+  - Mongo DB
+  - VEP
 - FHIRspark
   - HAPI FHIR Server
   - PostgreSQL Server
@@ -57,6 +60,8 @@ zcat public-portal-dump.latest.sql.gz | docker exec -i cbioportal_database_conta
 | cBioPortal Debugger | - | 5005 |
 | MariaDB-Datenbank | - | 3306 |
 | Session Service | - | 5000 |
+| Genome-Nexus | /genome-nexus | 8888 |
+| Genome-Nexus-VEP | - | 6060 |
 | Mongo DB | - | 27017 |
 | FHIRspark | /mtb/ | 3001 |
 | HAPI FHIR Server | /fhir/ | 8082 |
