@@ -130,6 +130,39 @@ services:
     depends_on:
       - cbioportal
       - fhirspark
+      - genomenexus
+    networks:
+      - cbioportal_net
+  genomenexus:
+    image: docker.miracum.org/cbioportal/genome-nexus:${RELEASE:-latest}
+    build: https://github.com/genome-nexus/genome-nexus.git
+    ports:
+      - "8888:8888"
+    environment:
+      - SERVER_PORT=8888
+    restart: unless-stopped
+    depends_on:
+      - genomenexus_db
+      - genomenexus_vep
+    command: /bin/sh -c "java -Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator -Dgn_vep.region.url=http://genomenexus_vep:8080/vep/human/region/VARIANT -jar /app.war"
+    networks:
+      - cbioportal_net
+  genomenexus_db:
+    image: docker.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
+    build: https://github.com/genome-nexus/genome-nexus-importer.git
+    environment:
+      - REF_ENSEMBL_VERSION=ensembl92_grch37
+      - SPECIES=homo_sapiens
+    restart: unless-stopped
+    networks:
+      - cbioportal_net
+  genomenexus_vep:
+    image: docker.miracum.org/cbioportal/genome-nexus-vep:${RELEASE:-latest}
+    environment:
+      - VEP_ASSEMBLY=GRCh37
+    restart: unless-stopped
+    ports:
+      - "6060:8080"
     networks:
       - cbioportal_net
 
