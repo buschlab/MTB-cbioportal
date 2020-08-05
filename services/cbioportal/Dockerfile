@@ -20,6 +20,9 @@ RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
 FROM alpine:3.12.0
 
+# create user for not running image with root privileges
+RUN addgroup -g 1001 -S cbioportal && adduser -u 1001 -S cbioportal -G cbioportal
+
 # download system dependencies first to take advantage of docker caching
 RUN apk add --update \
         build-base \
@@ -36,7 +39,9 @@ RUN apk add --update \
 ENV PORTAL_WEB_HOME=/cbioportal-webapp
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 
-RUN mkdir -p /cbioportal
+RUN mkdir -p /cbioportal && chown -R cbioportal:cbioportal /cbioportal
+RUN mkdir -p /target/tomcat.8080 && chown -R cbioportal:cbioportal /target/tomcat.8080
+
 COPY --from=build /cbioportal/portal/target/dependency/webapp-runner.jar /webapp-runner.jar
 # copy over core jar and scripts
 COPY --from=build /cbioportal/core /cbioportal/core
@@ -59,3 +64,6 @@ COPY --from=build /unzipped $PORTAL_WEB_HOME
 
 # script for calling dumpPortalInfo.py from docker-compose
 RUN echo "cd /cbioportal/core/src/main/scripts && ./dumpPortalInfo.pl \$1" >> /cbioportal/dumpPortalInfo.sh
+
+# switch to non-root user
+USER cbioportal
