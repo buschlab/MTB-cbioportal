@@ -144,7 +144,7 @@ services:
     depends_on:
       - genomenexus_db
       - genomenexus_vep
-    command: /bin/sh -c "java -Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator -Dgn_vep.region.url=http://genomenexus_vep:8080/vep/human/region/VARIANT -jar /app.war"
+    command: "-Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator -Dgn_vep.region.url=http://genomenexus_vep:8080/vep/human/region/VARIANT -jar /app/genome-nexus.war"
     networks:
       - cbioportal_net
   genomenexus_db:
