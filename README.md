@@ -13,11 +13,11 @@ sudo docker-compose -f docker-compose-dev.yml up
 
 **Der erste Startvorgang dauert ca. 15 Minuten**, da hierbei initial drei Docker Images gebaut werden. Nachfolgende Startvorgänge sind deutlich schneller.
 
-Einzelne Dienste (`cbioportal`, `cbioproxy`, `fhirspark`, `genome-nexus-vep`) können über den Befehl
+Einzelne Dienste (`cbioportal`, `cbioproxy`, `fhirspark`, `genome-nexus`, `genome-nexus-vep`) können über den Befehl
 ```
 ./build.sh <Dienstname>
 ```
-neu gebaut werden. Wird das `cbioportal`-Image neu gebaut, sollte unbedingt der `cbioproxy` auch neu gebaut werden.
+neu gebaut werden.
 
 ### Import von Studien
 
