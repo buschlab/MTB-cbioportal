@@ -25,8 +25,10 @@ RUN addgroup -g 1001 -S cbioportal && adduser -u 1001 -S cbioportal -G cbioporta
 
 # download system dependencies first to take advantage of docker caching
 RUN apk add --update \
+        bash \
         build-base \
         gcc \
+        mariadb-client \
         mariadb-dev \
         openjdk11-jre-headless \
         perl \
@@ -62,8 +64,12 @@ ENV PORTAL_HOME=/cbioportal
 RUN mkdir -p $PORTAL_WEB_HOME
 COPY --from=build /unzipped $PORTAL_WEB_HOME
 
+# add entrypoint
+COPY --from=build /cbioportal/docker/web-and-data/docker-entrypoint.sh /usr/local/bin/
+
 # script for calling dumpPortalInfo.py from docker-compose
 RUN echo "cd /cbioportal/core/src/main/scripts && ./dumpPortalInfo.pl \$1" >> /cbioportal/dumpPortalInfo.sh
 
 # switch to non-root user
 USER cbioportal
+ENTRYPOINT ["docker-entrypoint.sh"]
