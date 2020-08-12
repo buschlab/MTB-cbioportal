@@ -29,7 +29,7 @@
         "saml.server.signature": "true",
         "saml.server.signature.keyinfo.ext": "false",
         "exclude.session.state.from.auth.response": "false",
-        "saml.signing.certificate": "MIIDdzCCAl+gAwIBAgIEc00aMzANBgkqhkiG9w0BAQsFADBsMRAwDgYDVQQGEwdVbmtub3duMRAwDgYDVQQIEwdVbmtub3duMRAwDgYDVQQHEwdVbmtub3duMRAwDgYDVQQKEwdVbmtub3duMRAwDgYDVQQLEwdVbmtub3duMRAwDgYDVQQDEwdVbmtub3duMB4XDTIwMDYwNTEzMzEwNVoXDTIzMDMwMjEzMzEwNVowbDEQMA4GA1UEBhMHVW5rbm93bjEQMA4GA1UECBMHVW5rbm93bjEQMA4GA1UEBxMHVW5rbm93bjEQMA4GA1UEChMHVW5rbm93bjEQMA4GA1UECxMHVW5rbm93bjEQMA4GA1UEAxMHVW5rbm93bjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKowO8bJu/N4pdOCPCEqvKf0XWlmfn8i//W5yOJDhxX8sQp9/RQn11WAv+XS2cZ5UDNXAHUtu8zgylLjhJF6qoK+eC0IatDlYqeAtIAfA4VOEd/xxn0t7NT4ZNKdHE7UKvb7ncCehW+tgcFcYS0usOPp5JmAOFgoG7PL1QN4eVPvzx82jO+omJMA/T15g4201hTZNS4UPbDV29pElSsRLtVy01/YAUQvyi9SH6gFbU5PYPQHbrE/CDod5oDQObZ+6a0Ir5oBnhvRoBg/Qtlm29lZzMrp/CGJY0vuV5AWgKXptuAy3Fj6gtLBl6uoO6gbzfFwRnc81clwCoNG+rA+juUCAwEAAaMhMB8wHQYDVR0OBBYEFMMzqvJZNQUniKO6ixS+Yv+aK8WaMA0GCSqGSIb3DQEBCwUAA4IBAQAcAU19ocSzkO3HWr+cE23CzLDjf7IXiPvNrX7kKHqRvAbc4UsqQ33XvCYZfFgxkUxunaCe7zUtwOsxTNQg7in0vVVLKmODMo112ii7YJ5I4eDY66p1B+5Ea8oBBLrEPioIO1m3afQf6oJ37ii6/7kagti5L6nMM0qBVmegg4fPlqRs92kAVsK4LGPzBEEyjQXJZnu+Y5IEuCWSW9CdkMXLNAUMwSIhLUqq4awRbUkjlyl25GLsRY/nw3FJ2krr1vEW0Oar/YeKb43UKwZb5g//DzMFc7HXgGeGvCtQdFzSj53FFC0YERKCELeKukk1tRMuGNqyDtOwYgyY8d/bHKap",
+        "saml.signing.certificate": "",
         "saml.signature.algorithm": "RSA_SHA256",
         "saml_force_name_id_format": "true",
         "saml.client.signature": "true",
