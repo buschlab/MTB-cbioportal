@@ -15,7 +15,7 @@ services:
      - cbioportal_session
     networks:
      - cbioportal_net
-    command: /bin/sh -c "java -Xms2g -Xmx4g -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=noauthsessionservice -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
+    command: /bin/sh -c "java -Xms2g -Xmx4g -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=${AUTHENTICATE:-noauthsessionservice} -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
   cbioportal_database:
     restart: unless-stopped
     image: mariadb:latest
