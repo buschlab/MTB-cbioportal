@@ -73,7 +73,7 @@ services:
       - cbioportal_net
   hapiserver:
     restart: unless-stopped
-    image: docker.miracum.org/miracum-data/hapi-fhir-jpaserver:v8.1.2
+    image: docker.miracum.org/miracum-data/hapi-fhir-jpaserver:v8.1.3
     container_name: cbioportal_fhirspark_hapiserver
     depends_on:
       - hapi-postgres
