@@ -1,4 +1,4 @@
-FROM maven:3.5.4
+FROM maven:3.6.3
 RUN mkdir /genome-nexus-vep
 RUN git clone https://github.com/genome-nexus/genome-nexus-vep /genome-nexus-vep
 WORKDIR /genome-nexus-vep
