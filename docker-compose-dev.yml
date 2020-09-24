@@ -135,7 +135,8 @@ services:
       - cbioportal_net
   genomenexus:
     image: docker.miracum.org/cbioportal/genome-nexus:${RELEASE:-latest}
-    build: https://github.com/genome-nexus/genome-nexus.git
+    build:
+      context: services/genome-nexus
     ports:
       - "8888:8888"
     environment:
