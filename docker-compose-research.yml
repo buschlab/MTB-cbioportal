@@ -15,7 +15,7 @@ services:
      - cbioportal_session
     networks:
      - cbioportal_net
-    command: /bin/sh -c "java -Xms2g -Xmx4g -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dauthenticate=${AUTHENTICATE:-noauthsessionservice} -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar /cbioportal-webapp"
+    command: /bin/sh -c "java -Xms2g -Xmx4g -Ddb.password=${MYSQL_USER_PASSWORD:-P@ssword1} -Doncokb.token=${ONCOKBTOKEN} -Dgenomenexus.url=/genome-nexus -Dauthenticate=${AUTHENTICATE:-noauthsessionservice} -Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/ -jar webapp-runner.jar -AmaxHttpHeaderSize=16384 -AconnectionTimeout=20000 --enable-compression /cbioportal-webapp"
   cbioportal_database:
     restart: unless-stopped
     image: mariadb:latest
@@ -41,8 +41,6 @@ services:
     environment:
       SERVER_PORT: 5000
       JAVA_OPTS: -Dspring.data.mongodb.uri=mongodb://cbioportal_session_database:27017/session-service
-    volumes:
-      - cbioportal_data:/data/db
     depends_on:
       - cbioportal_session_database
     networks:
@@ -53,6 +51,8 @@ services:
     container_name: cbioportal_session_database_container
     environment:
       MONGO_INITDB_DATABASE: session_service
+    volumes:
+      - cbioportal_session_data:/data/db
     networks:
       - cbioportal_net
   nginx:
@@ -74,13 +74,13 @@ services:
     depends_on:
       - genomenexus_db
       - genomenexus_vep
-    command: /bin/sh -c "java -Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator -Dgn_vep.region.url=http://genomenexus_vep:8080/vep/human/region/VARIANT -jar /app.war"
+    command: "-Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator -Dgn_vep.region.url=http://genomenexus_vep:8080/vep/human/region/VARIANT -jar /app/genome-nexus.war"
     networks:
       - cbioportal_net
   genomenexus_db:
     image: docker.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
     environment:
-      - REF_ENSEMBL_VERSION=ensembl92_grch37
+      - REF_ENSEMBL_VERSION=grch37_ensembl92
       - SPECIES=homo_sapiens
     restart: unless-stopped
     networks:
@@ -98,3 +98,4 @@ networks:
   
 volumes:
   cbioportal_data:
+  cbioportal_session_data:

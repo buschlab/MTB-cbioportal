@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  cbioportal:
+    image: docker.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
+    container_name: cbioportal_init
+    user: root
+    environment:
+      MYSQL_USER_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
+    volumes:
+     - ./data:/data/
+     - ./config/:/config/
+     - ./init.sh:/init.sh:ro
+    command: /bin/sh -c "cd / && /init.sh"
+    entrypoint: []

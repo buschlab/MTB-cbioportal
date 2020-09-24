@@ -2,22 +2,25 @@
 
 ## Installation
 
-[Installationsanleitung](https://confluence.imi.med.fau.de/pages/viewpage.action?spaceKey=BMBFMI&title=Installationsanleitung+cBioPortal+via+Docker+auf+Ubuntu+18.04+Server)
+Ein OncoKB Token kann [hier](https://www.oncokb.org/apiAccess) angefordert werden. Diese muss in die `.env` Datei eintegraten werden.
 
-Ein OncoKB Token kann [hier](https://www.oncokb.org/apiAccess) angefordert werden.
+Initialisierung einmalig starten:
+```
+sudo docker-compose -f init.yml up
+```
 
 Starten der Development-Version:
 ```
-sudo docker-compose -f docker-compose-dev.yml up
+sudo ./build.sh cbioportal && ./sudo docker-compose -f docker-compose-dev.yml up
 ```
 
 **Der erste Startvorgang dauert ca. 15 Minuten**, da hierbei initial drei Docker Images gebaut werden. Nachfolgende Startvorgänge sind deutlich schneller.
 
-Einzelne Dienste (`cbioportal`, `cbioproxy`, `fhirspark`, `genome-nexus-vep`) können über den Befehl
+Einzelne Dienste (`cbioportal`, `cbioproxy`, `fhirspark`, `genome-nexus`, `genome-nexus-vep`) können über den Befehl
 ```
-./build.sh <Dienstname>
+sudo ./build.sh <Dienstname>
 ```
-neu gebaut werden. Wird das `cbioportal`-Image neu gebaut, sollte unbedingt der `cbioproxy` auch neu gebaut werden.
+neu gebaut werden.
 
 ### Import von Studien
 
