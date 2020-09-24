@@ -80,7 +80,7 @@ services:
   genomenexus_db:
     image: docker.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
     environment:
-      - REF_ENSEMBL_VERSION=ensembl92_grch37
+      - REF_ENSEMBL_VERSION=grch37_ensembl92
       - SPECIES=homo_sapiens
     restart: unless-stopped
     networks:
