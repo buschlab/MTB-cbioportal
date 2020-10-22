@@ -18,7 +18,7 @@ WORKDIR /cbioportal
 RUN mvn -DskipTests clean install
 RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
-FROM alpine:3.12.0
+FROM alpine:3.12.1
 
 # create user for not running image with root privileges
 RUN addgroup -g 1001 -S cbioportal && adduser -u 1001 -S cbioportal -G cbioportal
