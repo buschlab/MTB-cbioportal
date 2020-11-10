@@ -6,12 +6,12 @@ Ein OncoKB Token kann [hier](https://www.oncokb.org/apiAccess) angefordert werde
 
 Initialisierung einmalig starten:
 ```
-sudo docker-compose -f init.yml up
+sudo ./build.sh cbioportal && docker-compose -f init.yml up
 ```
 
 Starten der Development-Version:
 ```
-sudo ./build.sh cbioportal && ./sudo docker-compose -f docker-compose-dev.yml up
+sudo ./sudo docker-compose -f docker-compose-dev.yml up
 ```
 
 **Der erste Startvorgang dauert ca. 15 Minuten**, da hierbei initial drei Docker Images gebaut werden. Nachfolgende Startvorgänge sind deutlich schneller.
