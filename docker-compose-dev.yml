@@ -108,7 +108,7 @@ services:
       - cbioportal_net
   hapi-postgres:
     restart: unless-stopped
-    image: postgres:12.4-alpine
+    image: postgres:12.5-alpine
     container_name: cbioportal_fhirspark_database
     volumes:
       - fhir_data:/var/lib/postgresql/data
