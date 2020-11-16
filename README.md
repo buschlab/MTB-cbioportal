@@ -11,7 +11,7 @@ sudo ./build.sh cbioportal && docker-compose -f init.yml up
 
 Starten der Development-Version:
 ```
-sudo ./sudo docker-compose -f docker-compose-dev.yml up
+sudo docker-compose -f docker-compose-dev.yml up
 ```
 
 **Der erste Startvorgang dauert ca. 15 Minuten**, da hierbei initial drei Docker Images gebaut werden. Nachfolgende Startvorgänge sind deutlich schneller.
