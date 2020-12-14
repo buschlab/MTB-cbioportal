@@ -79,6 +79,8 @@ services:
       - cbioportal_net
   genomenexus_db:
     image: docker.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
+    volumes:
+      - genomenexus_data:/bitnami/mongodb
     environment:
       - REF_ENSEMBL_VERSION=grch37_ensembl92
       - SPECIES=homo_sapiens
@@ -99,3 +101,4 @@ networks:
 volumes:
   cbioportal_data:
   cbioportal_session_data:
+  genomenexus_data:
