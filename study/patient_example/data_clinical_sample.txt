@@ -1,6 +1,6 @@
-#Patient Identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method
-#Patient identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method
-#STRING	STRING	STRING	STRING	STRING	STRING
-#1	1	1	1	1	1
-PATIENT_ID	SAMPLE_ID	CANCER_TYPE	BIOPSY_SITE	GROUP	ANALYSIS_METHOD
-Patient_example	Patient_example_TD	Breast Carcinoma	Breast	A	WES
+#Patient Identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method	TMB	MSI
+#Patient identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method	Tumor Mutational Burden	Microsatellite Instability
+#STRING	STRING	STRING	STRING	STRING	STRING	NUMBER	NUMBER
+#1	1	1	1	1	1	1	1
+PATIENT_ID	SAMPLE_ID	CANCER_TYPE	BIOPSY_SITE	GROUP	ANALYSIS_METHOD	CVR_TMB_SCORE	MSI_SCORE
+Patient_example	Patient_example_TD	Breast Carcinoma	Breast	A	WES	10.42	13.37
