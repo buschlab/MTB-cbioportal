@@ -100,7 +100,7 @@ services:
       hapi.fhir.reuse_cached_search_results_millis: 5000
       hapi.fhir.implementationguides.genomics-reporting.name: hl7.fhir.uv.genomics-reporting
       hapi.fhir.implementationguides.genomics-reporting.version: 1.0.0
-      hapi.fhir.validation.requests_enabled: 'true'
+      hapi.fhir.validation.requests_enabled: 'false'
       spring.datasource.url: "jdbc:postgresql://hapi-postgres:5432/hapi?currentSchema=public"
       spring.datasource.username: hapiserver
       spring.datasource.password: ${POSTGRES_USER_PASSWORD:-P@ssword2}
