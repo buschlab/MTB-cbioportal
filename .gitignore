@@ -1,3 +1,4 @@
 data/*.sql
 data/*.sql.gz
 config/portal.properties
+**/.DS_Store
