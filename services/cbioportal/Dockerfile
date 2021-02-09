@@ -13,9 +13,11 @@
 # (see: stackoverflow.com/questions/56278325)
 FROM maven:3-openjdk-11 as build
 
-RUN git clone --single-branch --branch therapy_recommendation https://github.com/nr23730/cbioportal.git /cbioportal
+ARG VERSION=3.6.2
+
+RUN git clone --single-branch --branch v${VERSION} https://github.com/cbioportal/cbioportal.git /cbioportal
 WORKDIR /cbioportal
-RUN mvn -DskipTests clean install
+RUN mvn -DskipTests -Dfrontend.version=release${VERSION}-SNAPSHOT -Dfrontend.groupId=com.github.nr23730 clean install
 RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
 FROM alpine:3.12.1
