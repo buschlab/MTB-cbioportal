@@ -13,7 +13,7 @@
 # (see: stackoverflow.com/questions/56278325)
 FROM maven:3-openjdk-11 as build
 
-ARG VERSION=3.6.2
+ARG VERSION=3.6.4
 
 RUN git clone --single-branch --branch v${VERSION} https://github.com/cbioportal/cbioportal.git /cbioportal
 WORKDIR /cbioportal
