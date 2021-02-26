@@ -2,6 +2,8 @@
 
 ## Installation
 
+Eigenes Environment anlegen. Als Grundlage dafür dient die mit `cp .env.example .env` kopiert und anschließend an die eigenen Bedürfnisse angepasst werden kann.
+
 Ein OncoKB Token kann [hier](https://www.oncokb.org/apiAccess) angefordert werden. Diese muss in die `.env` Datei eintegraten werden.
 
 Initialisierung einmalig starten:
