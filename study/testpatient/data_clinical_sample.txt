@@ -1,7 +1,7 @@
-#Patient Identifier	Sample Identifier	Cancer Type	Biopsy Site	Sample Type	Analysis Method	Tumor Tissue Site	TMB	MSI
-#Patient identifier	Sample Identifier	Cancer Type	Biopsy Site	Sample Type	Analysis Method	Tumor Tissue Site	Tumor Mutational Burden	Microsatellite Instability
-#STRING	STRING	STRING	STRING	STRING	STRING	STRING	NUMBER	NUMBER
-#1	1	1	1	1	1	1	1	1
-PATIENT_ID	SAMPLE_ID	CANCER_TYPE	BIOPSY_SITE	SAMPLE_TYPE	ANALYSIS_METHOD	TUMOR_TISSUE_SITE	CVR_TMB_SCORE	MSI_SCORE
-Testpatient	Testpatient_01	Breast Carcinoma	Breast	primary	WES	Breast	10.35	13.37
-Testpatient	Testpatient_02	Breast Carcinoma	Liver	metastasis	Oncomine	Liver	10.42	17.64
+#Patient Identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method	TMB	MSI	MSI Status	HER2 IHC score	FISH translocation	PD-L1 Score (%)
+#Patient identifier	Sample Identifier	Cancer Type	Biopsy Site	Group	Analysis Method	Tumor Mutational Burden	Microsatellite Instability	MSI Status	HER2 immonohistochemitry level result	FISH translocation	PD-L1 Score in percent
+#STRING	STRING	STRING	STRING	STRING	STRING	NUMBER	NUMBER	STRING	NUMBER	STRING	NUMBER
+#1	1	1	1	1	1	1	1	1	1	1	1
+PATIENT_ID	SAMPLE_ID	CANCER_TYPE	BIOPSY_SITE	SAMPLE_TYPE	ANALYSIS_METHOD	CVR_TMB_SCORE	MSI_SCORE	MSI_TYPE	HER2_IHC_SCORE	FISH_TRANSLOCATION	PDL1_SCORE
+Testpatient	Testpatient_01	Breast Carcinoma	Breast	primary	WES	10.42	13.37	Instable	1	(-17p13)	72
+Testpatient	Testpatient_02	Breast Carcinoma	Liver	metastasis	Oncomine	10.42	17.64	Instable			

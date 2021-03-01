@@ -1,6 +1,6 @@
-#Patient Identifier	Cancer Type	Overall Survival Status	Overall Survival (Months)	Disease Free Status	Disease Free (Months)	Name	KAS ID	Birthdate
-#Patient identifier	Cancer Type	Overall survival status	Overall survival in months since diagnosis	Disease free status	Disease free in months since treatment	Patient Name	Patient ID in the KAS	Birthdate
-#STRING	STRING	STRING	NUMBER	STRING	NUMBER	STRING	STRING	STRING
-#1	1	1	1	1	1	1	1	1
-PATIENT_ID	TEST	OS_STATUS	OS_MONTHS	DFS_STATUS	DFS_MONTHS	PATIENT_NAME	KAS_ID	BIRTHDATE
-Testpatient	brca	0:LIVING	12	1:Recurred/Progressed	4	John Doe	42	01.01.1960
+#Patient Identifier	Cancer Type	Overall Survival Status	Overall Survival (Months)	Disease Free Status	Disease Free (Months)	Name	KAS ID	Age	Gender	Karnofsky Performance Score	ECOG status
+#Patient identifier	Cancer Type	Overall survival status	Overall survival in months since diagnosis	Disease free status	Disease free in months since treatment	Patient Name	Patient ID in the KAS	Age in years	Administrative gender	Score from the Karnofsky Performance status scale, representing the functional capabilities of a person.	ECOG status
+#STRING	STRING	STRING	NUMBER	STRING	NUMBER	STRING	STRING	NUMBER	STRING	NUMBER	NUMBER
+#1	1	1	1	1	1	1	1	1	1	1	1
+PATIENT_ID	TEST	OS_STATUS	OS_MONTHS	DFS_STATUS	DFS_MONTHS	PATIENT_DISPLAY_NAME	KAS_ID	AGE	GENDER	KARNOFSKY_PERFORMANCE_SCORE	ECOG _STATUS
+Testpatient	brca	0:LIVING	12	1:Recurred/Progressed	4	John Doe	42	60	Female	70	2
