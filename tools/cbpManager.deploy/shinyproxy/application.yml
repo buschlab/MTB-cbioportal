@@ -1,0 +1,31 @@
+proxy:
+  title: ShinyProxy
+  port: 8080
+  hide-navbar: true
+  landing-page: /app/cbpmanager
+  container-log-path: /container-logs
+  authentication: simple
+  users:
+  - name: admin
+    password: password
+  docker:
+    internal-networking: true
+    container-network: "cbpmanagerdeploy_cbpmanager_net"
+  specs:
+  - id: cbpmanager
+    display-name: Data manager for cBioPortal studies
+    container-image: cbpmanager-nginx
+    container-network: "${proxy.docker.container-network}"
+    container-env:
+      APP_NAME: cbpmanager
+logging:
+  file:
+    /log/shinyproxy.log
+
+server:
+  servlet:
+    context-path: /
+    #context-path:  /cbpmanager
+    #useForwardHeaders: true
+    #servlet:
+    #  context-path: /cbpmanager

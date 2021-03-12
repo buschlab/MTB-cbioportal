@@ -1,0 +1,56 @@
+# cbpManager-deploy
+
+Deploy cbpManager either with a Dockerfile or with docker-compose:
+
+## Deploy the cbpManager with the Dockerfile:
+
+`cd cbpmanager.deploy/cbpmanager/`
+
+Build image:
+
+`docker build -t cbpmanager .`
+
+Run docker container:
+(Change portforwarding and the filepath that should be mounted into the docker container.
+/path/to/study is the path to the study folder containing the studies of cBioPortal Cancer Genomics.)
+
+`docker run -d -p 3838:3838 -v /path/to/study:/srv/shiny-server/study/ --name cbpmanager cbpmanager:latest`
+
+Check the application in your browser at http://localhost:3838
+
+## Deploy the cbpManager and ShinyProxy via docker-compose:
+
+To use cbpManager with an authentication system you should deploy cbpManager with ShinyProxy. ShinyProxy offers different methods of authentication (see [https://www.shinyproxy.io/configuration/#authentication](https://www.shinyproxy.io/configuration/#authentication)).
+Modify the `authentication` and `users` sections of the `cbpmanager.deploy/shinyproxy/application.yml` file according to the description on the ShinyProxy page. 
+
+For demonstration purpose this `application.yml` file contains the simple authentication method with the user: **admin** and password: **password**.
+
+You can change the port of ShinyProxy by editing the `PORT` variable in the `.env` file.
+
+Change into the directory:
+
+`cd cbpmanager.deploy/`
+
+Build docker images:
+
+`docker-compose build`
+
+Start all necessary docker containers:
+
+`docker-compose up -d`
+
+Check the application in your browser at http://localhost:8081 and log in with user: **admin** and password: **password**
+
+## Further informations about the cbpManager:
+
+Homepage: 		https://arsenij-ust.github.io/cbpManager/
+
+GitHub:			https://github.com/arsenij-ust/cbpManager
+
+Vignette:		https://arsenij-ust.github.io/cbpManager/articles/intro.html
+
+Issues/Support:	https://github.com/arsenij-ust/cbpManager/issues
+
+Maintainer: 	Arsenij Ustjanzew (arsenij.ustjanzew@uni-mainz.de)
+
+
