@@ -25,7 +25,7 @@ Modify the `authentication` and `users` sections of the `cbpmanager.deploy/shiny
 
 For demonstration purpose this `application.yml` file contains the simple authentication method with the user: **admin** and password: **password**.
 
-You can change the port of ShinyProxy by editing the `PORT` variable in the `.env` file.
+You can change the port of ShinyProxy by editing the `PORT` variable in the `.env` file, as well as the paths of the `STUDY_DIR` and `LOG_DIR`. Use the `.env.example` file as an example.
 
 Change into the directory:
 
@@ -39,7 +39,7 @@ Start all necessary docker containers:
 
 `docker-compose up -d`
 
-Check the application in your browser at http://localhost:8081 and log in with user: **admin** and password: **password**
+Check the application in your browser at http://localhost:8180 and log in with user: **admin** and password: **password**
 
 ## Further informations about the cbpManager:
 
