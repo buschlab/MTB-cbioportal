@@ -3,3 +3,4 @@ data/*.sql.gz
 config/portal.properties
 **/.DS_Store
 .env
+!tools/cbpManager.deploy/shinyproxy/application.yml
