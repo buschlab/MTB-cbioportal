@@ -73,8 +73,15 @@ services:
     restart: unless-stopped
     depends_on:
       - genomenexus_db
-      - genomenexus_vep
-    command: "-Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator -Dgn_vep.region.url=http://genomenexus_vep:8080/vep/human/region/VARIANT -jar /app/genome-nexus.war"
+      - ensembl-rest
+      - ensembl-mysql
+    command: [
+      "-Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator",
+      "-Dvep.url=http://genomenexus_ensembl:3000/vep/human/hgvs/VARIANT?content-type=application/json&xref_refseq=1&ccds=1&canonical=1&domains=1&hgvs=1&numbers=1&protein=1",
+      "-Dgenexrefs.url=http://genomenexus_ensembl:3000/xrefs/id/ACCESSION?content-type=application/json",
+      "-jar",
+      "/app/genome-nexus.war"
+    ]
     networks:
       - cbioportal_net
   genomenexus_db:
@@ -87,10 +94,17 @@ services:
     restart: unless-stopped
     networks:
       - cbioportal_net
-  genomenexus_vep:
-    image: docker.miracum.org/cbioportal/genome-nexus-vep:${RELEASE:-latest}
-    environment:
-      - VEP_ASSEMBLY=GRCh37
+  ensembl-rest:
+    image: docker.miracum.org/cbioportal/ensembl-rest:${RELEASE:-latest}
+    restart: unless-stopped
+    volumes:
+      - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf
+    networks:
+      - cbioportal_net
+    depends_on:
+      - ensembl-mysql
+  ensembl-mysql:
+    image: docker.miracum.org/cbioportal/ensembl-mysql:${RELEASE:-latest}
     restart: unless-stopped
     networks:
       - cbioportal_net
