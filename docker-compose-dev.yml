@@ -159,7 +159,6 @@ services:
       - cbioportal_net
   genomenexus_db:
     image: harbor.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
-    build: https://github.com/genome-nexus/genome-nexus-importer.git
     ports:
       - "27018:27017"
     volumes:
