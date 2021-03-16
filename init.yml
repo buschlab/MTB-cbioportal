@@ -2,7 +2,7 @@ version: '3'
 
 services:
   cbioportal:
-    image: docker.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
     container_name: cbioportal_init
     user: root
     environment:

@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: docker.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
     container_name: cbioportal_container
     environment:
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
@@ -57,7 +57,7 @@ services:
       - cbioportal_net
   fhirspark:
     restart: unless-stopped
-    image: docker.miracum.org/cbioportal/fhirspark:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/fhirspark:${RELEASE:-latest}
     container_name: cbioportal_fhirspark
     depends_on:
       - hapiserver
@@ -103,7 +103,7 @@ services:
       - cbioportal_net
   nginx:
     restart: unless-stopped
-    image: docker.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
     container_name: cbioportal_nginx_container
     ports:
       - "${PORT:-8080}:8080"
@@ -114,7 +114,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus:
-    image: docker.miracum.org/cbioportal/genome-nexus:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/genome-nexus:${RELEASE:-latest}
     environment:
       - SERVER_PORT=8888
     restart: unless-stopped
@@ -132,7 +132,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus_db:
-    image: docker.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
     volumes:
       - genomenexus_data:/bitnami/mongodb
     environment:
@@ -142,7 +142,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: docker.miracum.org/cbioportal/ensembl-rest:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/ensembl-rest:${RELEASE:-latest}
     restart: unless-stopped
     volumes:
       - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf
@@ -151,7 +151,7 @@ services:
     depends_on:
       - ensembl-mysql
   ensembl-mysql:
-    image: docker.miracum.org/cbioportal/ensembl-mysql:${RELEASE:-latest}
+    image: harbor.miracum.org/cbioportal/ensembl-mysql:${RELEASE:-latest}
     restart: unless-stopped
     networks:
       - cbioportal_net
