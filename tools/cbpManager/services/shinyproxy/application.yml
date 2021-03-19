@@ -10,11 +10,11 @@ proxy:
     password: password
   docker:
     internal-networking: true
-    container-network: "cbpmanagerdeploy_cbpmanager_net"
+    container-network: "cbpmanager_cbpmanager_net"
   specs:
   - id: cbpmanager
     display-name: Data manager for cBioPortal studies
-    container-image: cbpmanager-nginx
+    container-image: cbpmanager
     container-network: "${proxy.docker.container-network}"
     container-env:
       APP_NAME: cbpmanager

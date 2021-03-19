@@ -4,8 +4,6 @@ Deploy cbpManager either with a Dockerfile or with docker-compose:
 
 ## Deploy the cbpManager with the Dockerfile:
 
-`cd cbpmanager.deploy/cbpmanager/`
-
 Build image:
 
 `docker build -t cbpmanager .`
@@ -21,19 +19,11 @@ Check the application in your browser at http://localhost:3838
 ## Deploy the cbpManager and ShinyProxy via docker-compose:
 
 To use cbpManager with an authentication system you should deploy cbpManager with ShinyProxy. ShinyProxy offers different methods of authentication (see [https://www.shinyproxy.io/configuration/#authentication](https://www.shinyproxy.io/configuration/#authentication)).
-Modify the `authentication` and `users` sections of the `cbpmanager.deploy/shinyproxy/application.yml` file according to the description on the ShinyProxy page. 
+Modify the `authentication` and `users` sections of the `services/shinyproxy/application.yml` file according to the description on the ShinyProxy page. 
 
 For demonstration purpose this `application.yml` file contains the simple authentication method with the user: **admin** and password: **password**.
 
 You can change the port of ShinyProxy by editing the `PORT` variable in the `.env` file, as well as the paths of the `STUDY_DIR` and `LOG_DIR`. Use the `.env.example` file as an example.
-
-Change into the directory:
-
-`cd cbpmanager.deploy/`
-
-Build docker images:
-
-`docker-compose build`
 
 Start all necessary docker containers:
 

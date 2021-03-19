@@ -1,14 +1,8 @@
 version: "3"
 services:
-  cbpmanager-nginx:
-    build: ./nginx-forwarder
-    image: cbpmanager-nginx
-    container_name: cbpmanager_nginx_container
-    networks:
-     - cbpmanager_net
   cbpmanager:
-    build: ./cbpmanager
-    image: cbpmanager
+    build: ./services/cbpmanager
+    image: harbor.miracum.org/cbpmanager/cbpmanager:latest
     container_name: cbpmanager_container
     networks:
      - cbpmanager_net
@@ -18,18 +12,16 @@ services:
     command: ['Rscript', '-e', "cbpManager::cbpManager(studyDir = '/srv/shiny-server/study/', logDir = '/srv/shiny-server/logs/', host = '0.0.0.0', port = 3838)"]
   cbpmanager-shinyproxy:
     restart: unless-stopped
-    build: ./shinyproxy
-    image: cbpmanager-shinyproxy
+    build: ./services/shinyproxy
+    image: harbor.miracum.org/cbpmanager/cbpmanager-shinyproxy:latest
     container_name: cbpmanager_shinyproxy_container
     ports:
       - "${PORT:-8180}:8080"
-    environment:
-      - "WORK_DIR=${PWD}"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./shinyproxy-logs/server:/log"
       - "./shinyproxy-logs/container:/container-logs"
-      #- "./shinyproxy:/opt/shinyproxy"
+      - "./services/shinyproxy/application.yml:/opt/shinyproxy/application.yml"
     networks:
      - cbpmanager_net
 

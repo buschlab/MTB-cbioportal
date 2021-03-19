@@ -1,7 +1,0 @@
-FROM nginx:stable-alpine
-
-COPY nginx.conf /etc/nginx/conf.d/nginx.conf
-
-# dockerfile uses `\` to escape, docker-compose uses $$ instead
-
-CMD /bin/sh -c "envsubst '\${APP_NAME}' < /etc/nginx/conf.d/nginx.conf > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
