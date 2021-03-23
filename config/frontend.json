@@ -1,4 +1,4 @@
 {
-  "cancerdrugsUrl": "http://cancerdrugs.s3-website.eu-central-1.amazonaws.com",
-  "cancerdrugsJsonUrl": "https://componc.github.io/cancerdrugs/drugs/"
+  "cancerdrugsUrl": "https://componc.github.io/cancerdrugs",
+  "cancerdrugsJsonUrl": "https://componc.github.io/cancerdrugs/data/drugs/"
 }
