@@ -14,10 +14,8 @@ proxy:
   specs:
   - id: cbpmanager
     display-name: Data manager for cBioPortal studies
-    container-image: cbpmanager
+    container-image: harbor.miracum.org/cbpmanager/cbpmanager
     container-network: "${proxy.docker.container-network}"
-    container-env:
-      APP_NAME: cbpmanager
 logging:
   file:
     /log/shinyproxy.log

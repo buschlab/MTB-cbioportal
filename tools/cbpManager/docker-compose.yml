@@ -21,7 +21,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./shinyproxy-logs/server:/log"
       - "./shinyproxy-logs/container:/container-logs"
-      - "./services/shinyproxy/application.yml:/opt/shinyproxy/application.yml"
+      - "./services/shinyproxy/application.yml:/app/application.yml"
     networks:
      - cbpmanager_net
 
