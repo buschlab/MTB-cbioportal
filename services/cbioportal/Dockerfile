@@ -20,7 +20,7 @@ WORKDIR /cbioportal
 RUN mvn -DskipTests -Dfrontend.version=release${VERSION}-SNAPSHOT -Dfrontend.groupId=com.github.nr23730 clean install
 RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
-FROM alpine:3.13.2
+FROM alpine:3.13.3
 
 # create user for not running image with root privileges
 RUN addgroup -g 1001 -S cbioportal && adduser -u 1001 -S cbioportal -G cbioportal
