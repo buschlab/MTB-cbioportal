@@ -2,3 +2,6 @@ data/*.sql
 data/*.sql.gz
 config/portal.properties
 **/.DS_Store
+.env
+!tools/cbpManager/shinyproxy/application.yml
+tools/cbpManager/shinyproxy-logs/*

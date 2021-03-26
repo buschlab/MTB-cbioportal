@@ -1,0 +1,4 @@
+Hugo_Symbol	Testpatient_01	Testpatient_02
+MET	0	1
+ATM	-1	0
+ERBB2	2	0
