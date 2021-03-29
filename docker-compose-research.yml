@@ -104,7 +104,8 @@ services:
     depends_on:
       - ensembl-mysql
   ensembl-mysql:
-    image: harbor.miracum.org/cbioportal/ensembl-mysql:${RELEASE:-latest}
+    build:
+      context: services/ensembl-mysql
     restart: unless-stopped
     networks:
       - cbioportal_net

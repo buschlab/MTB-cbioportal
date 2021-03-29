@@ -10,5 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build care containers
-        run: docker-compose --f docker-compose.yml build
+      - name: Build care cBioPortal
+        run: docker-compose -f docker-compose.yml build cbioportal
+      - name: Build care cbioproxy
+        run: docker-compose -f docker-compose.yml build nginx
