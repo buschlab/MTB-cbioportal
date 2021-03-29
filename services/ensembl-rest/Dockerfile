@@ -1,4 +1,4 @@
-FROM ensemblorg/ensembl-vep:latest
+FROM ensemblorg/ensembl-vep:release_103
 LABEL maintainer="Niklas Reimer <niklas.reimer@uksh.de>"
 
 USER root
