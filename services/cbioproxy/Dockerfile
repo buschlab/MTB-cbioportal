@@ -1,4 +1,4 @@
-FROM docker.miracum.org/cbioportal/cbioportal:${RELEASE:-latest} as static
+FROM harbor.miracum.org/cbioportal/cbioportal:${RELEASE:-latest} as static
 
 FROM openresty/openresty:alpine-fat
 COPY --from=static /cbioportal-webapp /usr/share/nginx/html
