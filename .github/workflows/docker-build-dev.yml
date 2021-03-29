@@ -11,4 +11,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build dev containers
-        run: docker-compose --f docker-compose-dev.yml build
+        run: docker-compose -f docker-compose-dev.yml build cbioportal
+      - name: Build dev cbioproxy
+        run: docker-compose -f docker-compose-dev.yml build nginx
