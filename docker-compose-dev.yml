@@ -115,6 +115,7 @@ services:
       FHIRSPARK_HL7V2SERVER: ${HL7V2SERVER}
       FHIRSPARK_HL7V2PORT: ${HL7V2PORT}
       FHIRSPARK_PORTALURL: http://cbioportal:8080/
+      FHIRSPARK_LOGINREQUIRED: ${LOGINREQUIRED:-false}
     volumes:
       - ./data/drugs.json:/drugs.json:ro
       - ./data/hgnc.csv:/hgnc.csv:ro

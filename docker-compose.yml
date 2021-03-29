@@ -100,6 +100,7 @@ services:
       FHIRSPARK_HL7V2SERVER: ${HL7V2SERVER}
       FHIRSPARK_HL7V2PORT: ${HL7V2PORT}
       FHIRSPARK_PORTALURL: http://cbioportal:8080/
+      FHIRSPARK_LOGINREQUIRED: ${LOGINREQUIRED:-false}
     volumes:
       - ./data/drugs.json:/drugs.json:ro
       - ./data/hgnc.csv:/hgnc.csv:ro
@@ -146,7 +147,7 @@ services:
       - ./services/cbioproxy/lua_login_config.lua:/etc/nginx/conf.d/lua_login_config.lua
       - ./services/cbioproxy/set_loginrequired.sh:/etc/nginx/conf.d/set_loginrequired.sh
     environment:
-      NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-true}
+      NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
       KEYCLOAK_URL: ${KEYCLOAK_URL:-//localhost:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-master}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT:-fhirspark}
