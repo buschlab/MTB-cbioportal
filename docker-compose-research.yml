@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: cbioportal/cbioportal:3.6.6
+    image: cbioportal/cbioportal:3.6.8
     container_name: cbioportal_container
     environment:
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
