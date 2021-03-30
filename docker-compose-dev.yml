@@ -43,7 +43,7 @@ services:
     ]
   cbioportal_database:
     restart: unless-stopped
-    image: mariadb:latest
+    image: mariadb:10.5.9
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
@@ -63,7 +63,7 @@ services:
      - cbioportal_net
   cbioportal_session:
     restart: unless-stopped
-    image: cbioportal/session-service:latest
+    image: cbioportal/session-service:0.3.0
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
@@ -108,7 +108,7 @@ services:
       - cbioportal_net
   hapiserver:
     restart: unless-stopped
-    image: hapiproject/hapi:latest
+    image: hapiproject/hapi:5.2.1
     container_name: cbioportal_fhirspark_hapiserver
     ports:
       - "8082:8080"
