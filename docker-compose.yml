@@ -10,6 +10,7 @@ services:
     volumes:
      - ./study:/study/
      - ./config/portal.properties:/cbioportal/portal.properties:ro
+     - ./config/frontend.json:/cbioportal/frontend.json:ro
     depends_on:
      - cbioportal_database
      - cbioportal_session
@@ -27,6 +28,7 @@ services:
       "-Dshow.civic=${ENABLE_CIVIC:-true}",
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-false}",
       "-Dquick_search.enabled=${ENABLE_QUICKSEARCH:-true}",
+      "-Dfrontend.config=/cbioportal/frontend.json",
       "-jar",
       "/webapp-runner.jar",
       "-AmaxHttpHeaderSize=16384",
