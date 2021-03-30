@@ -15,6 +15,7 @@ services:
      - ./config/portal.properties:/cbioportal/portal.properties:ro
      - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
      - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
+     - ./config/frontend.json:/cbioportal/frontend.json:ro
     depends_on:
      - cbioportal_database
      - cbioportal_session
@@ -49,6 +50,7 @@ services:
       "-Dsaml.idp.metadata.attribute.email=email",
       "-Dsaml.idp.metadata.attribute.role=Role",
       "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
+      "-Dfrontend.config=/cbioportal/frontend.json",
       "-jar",
       "/webapp-runner.jar",
       "-AmaxHttpHeaderSize=16384",
@@ -58,7 +60,7 @@ services:
     ]
   cbioportal_database:
     restart: unless-stopped
-    image: mariadb:latest
+    image: mariadb:10.5.9
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
@@ -125,7 +127,7 @@ services:
       - cbioportal_net
   hapiserver:
     restart: unless-stopped
-    image: hapiproject/hapi:latest
+    image: hapiproject/hapi:5.2.1
     container_name: cbioportal_fhirspark_hapiserver
     ports:
       - "8082:8080"
