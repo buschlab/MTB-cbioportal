@@ -35,6 +35,8 @@ services:
       "-Dshow.civic=${ENABLE_CIVIC:-true}",
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-false}",
       "-Dquick_search.enabled=${ENABLE_QUICKSEARCH:-true}",
+      "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
+      "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dfrontend.config=/cbioportal/frontend.json",
       "-jar",
       "/webapp-runner.jar",
