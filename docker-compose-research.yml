@@ -10,6 +10,8 @@ services:
     volumes:
      - ./study:/study/
      - ./config/portal.properties:/cbioportal/portal.properties:ro
+     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
+     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
     depends_on:
      - cbioportal_database
      - cbioportal_session
@@ -27,6 +29,19 @@ services:
       "-Dshow.civic=${ENABLE_CIVIC:-true}",
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-true}",
       "-Dquick_search.enabled=${ENABLE_QUICKSEARCH:-true}",
+      "-Dfilter_groups_by_appname=false",
+      "-Dsaml.sp.metadata.entityid=cbioportal",
+      "-Dsaml.sp.metadata.entitybaseurl=${CBIOPORTAL_URL}",
+      "-Dsaml.idp.metadata.location=classpath:/client-tailored-saml-idp-metadata.xml",
+      "-Dsaml.idp.metadata.entityid=${KEYCLOAK_URL}/auth/realms/${KEYCLOAK_REALM}",
+      "-Dsaml.keystore.location=classpath:/samlKeystore.jks",
+      "-Dsaml.keystore.private-key.key=${KEYSTORE_KEY}",
+      "-Dsaml.keystore.password=${KEYSTORE_PASSWORD}",
+      "-Dsaml.keystore.default-key=${KEYSTORE_KEY}",
+      "-Dsaml.keystore.private-key.password=${KEYSTORE_PASSWORD}",
+      "-Dsaml.idp.metadata.attribute.email=email",
+      "-Dsaml.idp.metadata.attribute.role=Role",
+      "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-jar",

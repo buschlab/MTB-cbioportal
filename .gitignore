@@ -1,6 +1,8 @@
 data/*.sql
 data/*.sql.gz
 config/portal.properties
+config/client-tailored-saml-idp-metadata.xml
+*.jks
 **/.DS_Store
 .env
 !tools/cbpManager/shinyproxy/application.yml

@@ -13,6 +13,8 @@ services:
     volumes:
      - ./study:/study/
      - ./config/portal.properties:/cbioportal/portal.properties:ro
+     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
+     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
      - ./config/frontend.json:/cbioportal/frontend.json:ro
     depends_on:
      - cbioportal_database
@@ -35,6 +37,19 @@ services:
       "-Dshow.civic=${ENABLE_CIVIC:-true}",
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-false}",
       "-Dquick_search.enabled=${ENABLE_QUICKSEARCH:-true}",
+      "-Dfilter_groups_by_appname=false",
+      "-Dsaml.sp.metadata.entityid=cbioportal",
+      "-Dsaml.sp.metadata.entitybaseurl=${CBIOPORTAL_URL}",
+      "-Dsaml.idp.metadata.location=classpath:/client-tailored-saml-idp-metadata.xml",
+      "-Dsaml.idp.metadata.entityid=${KEYCLOAK_URL}/auth/realms/${KEYCLOAK_REALM}",
+      "-Dsaml.keystore.location=classpath:/samlKeystore.jks",
+      "-Dsaml.keystore.private-key.key=${KEYSTORE_KEY}",
+      "-Dsaml.keystore.password=${KEYSTORE_PASSWORD}",
+      "-Dsaml.keystore.default-key=${KEYSTORE_KEY}",
+      "-Dsaml.keystore.private-key.password=${KEYSTORE_PASSWORD}",
+      "-Dsaml.idp.metadata.attribute.email=email",
+      "-Dsaml.idp.metadata.attribute.role=Role",
+      "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dfrontend.config=/cbioportal/frontend.json",
@@ -103,6 +118,8 @@ services:
       FHIRSPARK_SENDHL7V2: ${HL7V2ENABLE:-false}
       FHIRSPARK_HL7V2SERVER: ${HL7V2SERVER}
       FHIRSPARK_HL7V2PORT: ${HL7V2PORT}
+      FHIRSPARK_PORTALURL: http://cbioportal:8080/
+      FHIRSPARK_LOGINREQUIRED: ${LOGINREQUIRED:-false}
     volumes:
       - ./data/drugs.json:/drugs.json:ro
       - ./data/hgnc.csv:/hgnc.csv:ro
@@ -150,6 +167,18 @@ services:
     build:
       context: services/cbioproxy
     container_name: cbioportal_nginx_container
+    volumes:
+      - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf
+      - ./services/cbioproxy/lua_auth_config.lua:/etc/nginx/conf.d/lua_auth_config.lua
+      - ./services/cbioproxy/lua_login_config.lua:/etc/nginx/conf.d/lua_login_config.lua
+    environment:
+      NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-true}
+      KEYCLOAK_URL: ${KEYCLOAK_URL:-//localhost:8080}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-master}
+      KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT:-fhirspark}
+      KEYCLOAK_SECRET: ${KEYCLOAK_SECRET:-nosecrethere}
+      CBIOPORTAL_URL: ${CBIOPORTAL_URL:-//localhost:8080}
     ports:
       - "${PORT:-8080}:8080"
     depends_on:
