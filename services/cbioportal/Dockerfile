@@ -15,9 +15,13 @@ FROM maven:3-openjdk-11 as build
 
 ARG VERSION=3.6.6
 
+RUN git clone --single-branch --branch release${VERSION} https://github.com/nr23730/cbioportal-frontend.git /frontend
+WORKDIR /frontend
+RUN mvn clean install
+
 RUN git clone --single-branch --branch v${VERSION} https://github.com/cbioportal/cbioportal.git /cbioportal
 WORKDIR /cbioportal
-RUN mvn -DskipTests -Dfrontend.version=release${VERSION}-SNAPSHOT -Dfrontend.groupId=com.github.nr23730 clean install
+RUN mvn -DskipTests -Dfrontend.version=0.3.0 -Dfrontend.groupId=com.github.cbioportal clean install
 RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
 FROM alpine:3.13.3
