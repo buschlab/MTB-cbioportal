@@ -42,6 +42,8 @@ services:
       "-Dsaml.idp.metadata.attribute.email=email",
       "-Dsaml.idp.metadata.attribute.role=Role",
       "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
+      "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
+      "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-jar",
       "/webapp-runner.jar",
       "-AmaxHttpHeaderSize=16384",
