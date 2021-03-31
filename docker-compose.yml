@@ -43,6 +43,8 @@ services:
       "-Dsaml.idp.metadata.attribute.email=email",
       "-Dsaml.idp.metadata.attribute.role=Role",
       "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
+      "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
+      "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dfrontend.config=/cbioportal/frontend.json",
       "-jar",
       "/webapp-runner.jar",
@@ -110,7 +112,7 @@ services:
       - cbioportal_net
   hapiserver:
     restart: unless-stopped
-    image: hapiproject/hapi:5.2.1
+    image: hapiproject/hapi:v5.2.1
     container_name: cbioportal_fhirspark_hapiserver
     depends_on:
       - hapi-postgres
@@ -200,6 +202,7 @@ services:
     depends_on:
       - ensembl-mysql
   ensembl-mysql:
+    image: harbor.miracum.org/cbioportal/ensembl-mysql
     build:
       context: services/ensembl-mysql
     restart: unless-stopped
