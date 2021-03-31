@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: cbioportal/cbioportal:latest
+    image: cbioportal/cbioportal:3.6.6
     container_name: cbioportal_container
     environment:
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
@@ -38,7 +38,7 @@ services:
     ]
   cbioportal_database:
     restart: unless-stopped
-    image: mariadb:latest
+    image: mariadb:10.5.9
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
@@ -56,7 +56,7 @@ services:
      - cbioportal_net
   cbioportal_session:
     restart: unless-stopped
-    image: cbioportal/session-service:latest
+    image: cbioportal/session-service:0.3.0
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
