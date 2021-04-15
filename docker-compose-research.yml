@@ -139,8 +139,7 @@ services:
     depends_on:
       - ensembl-mysql
   ensembl-mysql:
-    build:
-      context: services/ensembl-mysql
+    image: nr205/ensembl-mysql:latest
     restart: unless-stopped
     networks:
       - cbioportal_net
