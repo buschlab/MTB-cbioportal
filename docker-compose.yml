@@ -174,6 +174,8 @@ services:
       - ensembl-rest
       - ensembl-mysql
     command: [
+      "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
+      "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator",
       "-Dvep.url=http://genomenexus_ensembl:3000/vep/human/hgvs/VARIANT?content-type=application/json&xref_refseq=1&ccds=1&canonical=1&domains=1&hgvs=1&numbers=1&protein=1",
       "-Dgenexrefs.url=http://genomenexus_ensembl:3000/xrefs/id/ACCESSION?content-type=application/json",
