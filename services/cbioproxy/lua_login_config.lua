@@ -1,14 +1,32 @@
 content_by_lua '
-    local knownStudies = {"MTB"}
     local roleString = ngx.ctx.user_roles
     local usernameString = ngx.ctx.user_name
     if (usernameString == nil) then usernameString = "Unknown" end
     if (roleString == nil) then roleString = "" end
+    local knownStudies = {}
+    local manuallyKnownStudies = {"MTB"}
+    local studiesData = os.getenv("ALL_CBIOPORTAL_STUDIES")
     local foundStudyRoles = {}
     local foundPatientRoles = {}
     local hasNoPermission = false
     if (roleString == "no_roles") then hasNoPermission = true end
 
+    -- extract all studies from ALL_CBIOPORTAL_STUDIES env variable if available
+    if (studiesData == nil) then
+        knownStudies = manuallyKnownStudies 
+    else
+        local i = 1
+        for study in string.gmatch(studiesData, "%w+") do
+            knownStudies[i] = study
+            i = i + 1
+        end
+
+        if (#knownStudies == 0) then
+            knownStudies = manuallyKnownStudies
+        end
+    end
+
+    -- function to check whether a table contains a specific value
     local function has_value (table, val)
         for index, value in ipairs(table) do
             if value == val then
@@ -18,7 +36,7 @@ content_by_lua '
         return false
     end
 
-
+    -- start checking whether a user role is a study-role or not
     for role in string.gmatch(roleString, "%\\"(%a+)%\\"") do
         if(has_value(knownStudies, role)) then
             table.insert(foundStudyRoles, role)            
@@ -26,7 +44,8 @@ content_by_lua '
             table.insert(foundPatientRoles, role)
         end
     end
-    
+
+    -- starting to build up the html login file
     local studyRolesAsString = ""
     local patientRolesAsString = ""
     
