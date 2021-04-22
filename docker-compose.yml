@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
+    image: ghcr.io/buschlab/cbioportal:${RELEASE:-latest}
     container_name: cbioportal_container
     environment:
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
@@ -94,7 +94,7 @@ services:
       - cbioportal_net
   fhirspark:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/fhirspark:${RELEASE:-latest}
+    image: ghcr.io/buschlab/fhirspark:${RELEASE:-latest}
     container_name: cbioportal_fhirspark
     depends_on:
       - hapiserver
@@ -142,7 +142,7 @@ services:
       - cbioportal_net
   nginx:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
+    image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
     container_name: cbioportal_nginx_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
@@ -165,7 +165,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus:
-    image: harbor.miracum.org/cbioportal/genome-nexus:${RELEASE:-latest}
+    image: ghcr.io/buschlab/genome-nexus:${RELEASE:-latest}
     environment:
       - SERVER_PORT=8888
     restart: unless-stopped
@@ -183,7 +183,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus_db:
-    image: harbor.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
+    image: ghcr.io/buschlab/genome-nexus-db:${RELEASE:-latest}
     volumes:
       - genomenexus_data:/bitnami/mongodb
     environment:
@@ -193,7 +193,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: harbor.miracum.org/cbioportal/ensembl-rest:${RELEASE:-latest}
+    image: ghcr.io/buschlab/ensembl-rest:${RELEASE:-latest}
     restart: unless-stopped
     volumes:
       - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf
@@ -202,7 +202,7 @@ services:
     depends_on:
       - ensembl-mysql
   ensembl-mysql:
-    image: nr205/ensembl-mysql:latest
+    image: ghcr.io/buschlab/ensembl-mysql:latest
     restart: unless-stopped
     networks:
       - cbioportal_net

@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
+    image: ghcr.io/buschlab/cbioportal:${RELEASE:-latest}
     build:
       context: services/cbioportal
     container_name: cbioportal_container
@@ -107,7 +107,7 @@ services:
       - cbioportal_net
   fhirspark:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/fhirspark:${RELEASE:-latest}
+    image: ghcr.io/buschlab/fhirspark:${RELEASE:-latest}
     build:
       context: services/fhirspark
     container_name: cbioportal_fhirspark
@@ -163,7 +163,7 @@ services:
       - cbioportal_net
   nginx:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
+    image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
     build:
       context: services/cbioproxy
     container_name: cbioportal_nginx_container
@@ -188,7 +188,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus:
-    image: harbor.miracum.org/cbioportal/genome-nexus:${RELEASE:-latest}
+    image: ghcr.io/buschlab/genome-nexus:${RELEASE:-latest}
     build:
       context: services/genome-nexus
     ports:
@@ -210,7 +210,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus_db:
-    image: harbor.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
+    image: ghcr.io/buschlab/genome-nexus-db:${RELEASE:-latest}
     ports:
       - "27018:27017"
     volumes:
@@ -222,7 +222,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: harbor.miracum.org/cbioportal/ensembl-rest:${RELEASE:-latest}
+    image: ghcr.io/buschlab/ensembl-rest:${RELEASE:-latest}
     restart: unless-stopped
     ports:
       - "8083:3000"
@@ -233,7 +233,7 @@ services:
     depends_on:
       - ensembl-mysql
   ensembl-mysql:
-    image: nr205/ensembl-mysql:latest
+    image: ghcr.io/buschlab/ensembl-mysql:latest
     restart: unless-stopped
     networks:
       - cbioportal_net
