@@ -224,7 +224,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: ghcr.io/buschlab/ensembl-rest:${RELEASE:-latest}
+    image: nr205/ensembl-rest:${RELEASE:-latest}
     restart: unless-stopped
     ports:
       - "8083:3000"
