@@ -5,25 +5,35 @@ content_by_lua '
     if (roleString == nil) then roleString = "" end
     local knownStudies = {}
     local manuallyKnownStudies = {"MTB"}
-    local studiesData = os.getenv("ALL_CBIOPORTAL_STUDIES")
     local foundStudyRoles = {}
     local foundPatientRoles = {}
     local hasNoPermission = false
     if (roleString == "no_roles") then hasNoPermission = true end
 
-    -- extract all studies from ALL_CBIOPORTAL_STUDIES env variable if available
-    if (studiesData == nil) then
-        knownStudies = manuallyKnownStudies 
-    else
+    -- curl /api/studies and extract all studies if available
+    local userSessionId = ngx.var.cookie_JSESSIONID
+    local cookie = ""
+    if(userSessionId ~= nil) then
+        cookie = "\\"JSESSIONID=" .. userSessionId .. "\\""
+    end
+    local command = [[ curl --cookie ]] .. cookie .. [[ "http://cbioportal:8080/api/studies" ]]
+    print(command)
+    local handle = io.popen(command)
+    local result = handle:read("*a")
+    handle:close()
+
+    if(result ~= nil) then
         local i = 1
-        for study in string.gmatch(studiesData, "%w+") do
+        for study in string.gmatch(result, "\\"studyId\\":\\"[^\\"]*\\"") do
+            study = study:gsub("%\\"studyId\\":\\"", "")
+            study = study:gsub("%\\"", "")
             knownStudies[i] = study
             i = i + 1
         end
+    end
 
-        if (#knownStudies == 0) then
-            knownStudies = manuallyKnownStudies
-        end
+    if (knownStudies == nil or #knownStudies == 0) then
+        knownStudies = manuallyKnownStudies 
     end
 
     -- function to check whether a table contains a specific value

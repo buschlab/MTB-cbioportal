@@ -149,7 +149,6 @@ services:
       - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf
       - ./services/cbioproxy/lua_auth_config.lua:/etc/nginx/conf.d/lua_auth_config.lua
       - ./services/cbioproxy/lua_login_config.lua:/etc/nginx/conf.d/lua_login_config.lua
-      - ./services/cbioproxy/curl_studyIds_from_portal.sh:/etc/nginx/curl_studyIds_from_portal.sh
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
       KEYCLOAK_URL: ${KEYCLOAK_URL:-//localhost:8080}
@@ -159,7 +158,6 @@ services:
       CBIOPORTAL_URL: ${CBIOPORTAL_URL:-//localhost:8080}
     ports:
       - "${PORT:-8080}:8080"
-    command: /bin/bash -c ". /etc/nginx/curl_studyIds_from_portal.sh && nginx -g 'daemon off;'"
     depends_on:
       - cbioportal
       - fhirspark
