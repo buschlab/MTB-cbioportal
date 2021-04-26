@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/cbioportal:${RELEASE:-latest}
+    image: ghcr.io/buschlab/cbioportal:${RELEASE:-latest}
     container_name: cbioportal_container
     environment:
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
@@ -94,7 +94,7 @@ services:
       - cbioportal_net
   fhirspark:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/fhirspark:${RELEASE:-latest}
+    image: ghcr.io/buschlab/fhirspark:${RELEASE:-latest}
     container_name: cbioportal_fhirspark
     depends_on:
       - hapiserver
@@ -142,7 +142,7 @@ services:
       - cbioportal_net
   nginx:
     restart: unless-stopped
-    image: harbor.miracum.org/cbioportal/cbioproxy:${RELEASE:-latest}
+    image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
     container_name: cbioportal_nginx_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
@@ -165,7 +165,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus:
-    image: harbor.miracum.org/cbioportal/genome-nexus:${RELEASE:-latest}
+    image: ghcr.io/buschlab/genome-nexus:${RELEASE:-latest}
     environment:
       - SERVER_PORT=8888
     restart: unless-stopped
@@ -174,6 +174,8 @@ services:
       - ensembl-rest
       - ensembl-mysql
     command: [
+      "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
+      "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dspring.data.mongodb.uri=mongodb://genomenexus_db:27017/annotator",
       "-Dvep.url=http://genomenexus_ensembl:3000/vep/human/hgvs/VARIANT?content-type=application/json&xref_refseq=1&ccds=1&canonical=1&domains=1&hgvs=1&numbers=1&protein=1",
       "-Dgenexrefs.url=http://genomenexus_ensembl:3000/xrefs/id/ACCESSION?content-type=application/json",
@@ -183,7 +185,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus_db:
-    image: harbor.miracum.org/cbioportal/genome-nexus-db:${RELEASE:-latest}
+    image: ghcr.io/buschlab/genome-nexus-db:${RELEASE:-latest}
     volumes:
       - genomenexus_data:/bitnami/mongodb
     environment:
@@ -193,7 +195,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: harbor.miracum.org/cbioportal/ensembl-rest:${RELEASE:-latest}
+    image: nr205/ensembl-rest:${RELEASE:-latest}
     restart: unless-stopped
     volumes:
       - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf
@@ -202,9 +204,7 @@ services:
     depends_on:
       - ensembl-mysql
   ensembl-mysql:
-    image: harbor.miracum.org/cbioportal/ensembl-mysql
-    build:
-      context: services/ensembl-mysql
+    image: ghcr.io/buschlab/ensembl-mysql:latest
     restart: unless-stopped
     networks:
       - cbioportal_net
