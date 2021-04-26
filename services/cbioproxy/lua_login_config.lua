@@ -1,14 +1,42 @@
 content_by_lua '
-    local knownStudies = {"MTB"}
     local roleString = ngx.ctx.user_roles
     local usernameString = ngx.ctx.user_name
     if (usernameString == nil) then usernameString = "Unknown" end
     if (roleString == nil) then roleString = "" end
+    local knownStudies = {}
+    local manuallyKnownStudies = {"MTB"}
     local foundStudyRoles = {}
     local foundPatientRoles = {}
     local hasNoPermission = false
     if (roleString == "no_roles") then hasNoPermission = true end
 
+    -- curl /api/studies and extract all studies if available
+    local userSessionId = ngx.var.cookie_JSESSIONID
+    local cookie = ""
+    if(userSessionId ~= nil) then
+        cookie = "\\"JSESSIONID=" .. userSessionId .. "\\""
+    end
+    local command = [[ curl --cookie ]] .. cookie .. [[ "http://cbioportal:8080/api/studies" ]]
+    print(command)
+    local handle = io.popen(command)
+    local result = handle:read("*a")
+    handle:close()
+
+    if(result ~= nil) then
+        local i = 1
+        for study in string.gmatch(result, "\\"studyId\\":\\"[^\\"]*\\"") do
+            study = study:gsub("%\\"studyId\\":\\"", "")
+            study = study:gsub("%\\"", "")
+            knownStudies[i] = study
+            i = i + 1
+        end
+    end
+
+    if (knownStudies == nil or #knownStudies == 0) then
+        knownStudies = manuallyKnownStudies 
+    end
+
+    -- function to check whether a table contains a specific value
     local function has_value (table, val)
         for index, value in ipairs(table) do
             if value == val then
@@ -18,7 +46,7 @@ content_by_lua '
         return false
     end
 
-
+    -- start checking whether a user role is a study-role or not
     for role in string.gmatch(roleString, "%\\"(%a+)%\\"") do
         if(has_value(knownStudies, role)) then
             table.insert(foundStudyRoles, role)            
@@ -26,7 +54,8 @@ content_by_lua '
             table.insert(foundPatientRoles, role)
         end
     end
-    
+
+    -- starting to build up the html login file
     local studyRolesAsString = ""
     local patientRolesAsString = ""
     
