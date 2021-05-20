@@ -12,6 +12,7 @@ services:
      - ./config/portal.properties:/cbioportal/portal.properties:ro
      - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
      - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
+     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}
     depends_on:
      - cbioportal_database
      - cbioportal_session
@@ -44,6 +45,7 @@ services:
       "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
+      "-Dskin.right_logo=${LOGO:-miracum.png}",
       "-jar",
       "/webapp-runner.jar",
       "-AmaxHttpHeaderSize=16384",
