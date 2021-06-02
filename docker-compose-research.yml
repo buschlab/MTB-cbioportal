@@ -18,7 +18,7 @@ services:
     networks:
      - cbioportal_net
     command: [ 
-      "/usr/bin/java",
+      "java",
       "-Xms2g",
       "-Xmx4g",
       "-Doncokb.public_api.url=${ONCOKB_URL:-https://public.api.oncokb.org/api/v1}",
