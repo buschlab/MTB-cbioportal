@@ -1,0 +1,2 @@
+PATIENT_ID	SAMPLE_ID	RESOURCE_ID	URL
+Patient_example	Patient_example_TD	PATHOLOGY_SLIDE	http://localhost:8080/reports/Patient_example/Patient_example/Patient_example_TD.pdf
