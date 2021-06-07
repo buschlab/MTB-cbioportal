@@ -112,7 +112,7 @@ services:
       - cbioportal_net
   hapiserver:
     restart: unless-stopped
-    image: hapiproject/hapi:v5.4.0
+    image: hapiproject/hapi:v5.4.1
     container_name: cbioportal_fhirspark_hapiserver
     depends_on:
       - hapi-postgres
