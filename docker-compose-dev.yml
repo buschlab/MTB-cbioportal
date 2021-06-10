@@ -8,6 +8,8 @@ services:
       context: services/cbioportal
     container_name: cbioportal_container
     environment:
+      HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
+      NO_PROXY: "cbioportal,cbioportal_session"
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
       SHOW_DEBUG_INFO: "true"
     volumes:
@@ -58,6 +60,8 @@ services:
       "-AmaxHttpHeaderSize=16384",
       "-AconnectionTimeout=20000",
       "--enable-compression",
+      "--proxy-base-url",
+      "${CBIOPORTAL_URL}",
       "/cbioportal-webapp"
     ]
   cbioportal_database:
@@ -138,8 +142,6 @@ services:
     environment:
       hapi.fhir.server_address: "http://hapiserver:8080/fhir/"
       hapi.fhir.reuse_cached_search_results_millis: 5000
-      hapi.fhir.implementationguides.genomics-reporting.name: hl7.fhir.uv.genomics-reporting
-      hapi.fhir.implementationguides.genomics-reporting.version: 1.0.0
       hapi.fhir.validation.requests_enabled: 'false'
       spring.datasource.url: "jdbc:postgresql://hapi-postgres:5432/hapi?currentSchema=public"
       spring.datasource.username: hapiserver
