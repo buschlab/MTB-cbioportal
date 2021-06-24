@@ -98,7 +98,9 @@ services:
     container_name: cbioportal_nginx_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
-      - ./services/cbioproxy/cbioportal-research.conf:/etc/nginx/conf.d/cbioportal.conf
+      - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf
+      - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua
+      - ./reports:/usr/share/reports
     ports:
       - "${PORT:-8080}:8080"
     depends_on:
