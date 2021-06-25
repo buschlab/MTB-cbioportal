@@ -1,0 +1,32 @@
+ENTITY_STABLE_ID	NAME	DESCRIPTION	Patient_example_TD
+mutational_signature_contribution_AC1	AC1	spontaneous deamination	0.274031792508634
+mutational_signature_contribution_AC10	AC10	altered POL E	0
+mutational_signature_contribution_AC11	AC11	alkylating agents, temozolomide	0
+mutational_signature_contribution_AC12	AC12	unknown	0
+mutational_signature_contribution_AC13	AC13	APOBEC	0.093382951702147
+mutational_signature_contribution_AC14	AC14	unknown	0.0891036748178115
+mutational_signature_contribution_AC15	AC15	defect DNA MMR	0
+mutational_signature_contribution_AC16	AC16	unknown	0
+mutational_signature_contribution_AC17	AC17	unknown	0
+mutational_signature_contribution_AC18	AC18	unknown	0
+mutational_signature_contribution_AC19	AC19	unknown	0
+mutational_signature_contribution_AC2	AC2	APOBEC	0
+mutational_signature_contribution_AC20	AC20	associated w. small indels at repeats	0.12146179889146
+mutational_signature_contribution_AC21	AC21	unknown	0
+mutational_signature_contribution_AC22	AC22	aristocholic acid	0
+mutational_signature_contribution_AC23	AC23	unknown	0
+mutational_signature_contribution_AC24	AC24	aflatoxin	0
+mutational_signature_contribution_AC25	AC25	unknown	0
+mutational_signature_contribution_AC26	AC26	defect DNA MMR	0
+mutational_signature_contribution_AC27	AC27	unknown	0
+mutational_signature_contribution_AC28	AC28	unknown	0.222390048365079
+mutational_signature_contribution_AC29	AC29	tobacco chewing	0.199629733714868
+mutational_signature_contribution_AC3	AC3	defect DNA DSB repair hom. recomb.	0
+mutational_signature_contribution_AC30	AC30	unknown	0
+mutational_signature_contribution_AC4	AC4	tobacco mutatgens, benzo(a)pyrene	0
+mutational_signature_contribution_AC5	AC5	unknown	0
+mutational_signature_contribution_AC6	AC6	defect DNA MMR, found in MSI tumors	0
+mutational_signature_contribution_AC7	AC7	UV light exposure	0
+mutational_signature_contribution_AC8	AC8	unknown	0
+mutational_signature_contribution_AC9	AC9	POL eta and SHM	0
+mutational_signature_contribution_unassigned	unassigned	unknown	0
