@@ -77,6 +77,9 @@ COPY --from=build /cbioportal/docker/web-and-data/docker-entrypoint.sh /usr/loca
 # script for calling dumpPortalInfo.py from docker-compose
 RUN echo "cd /cbioportal/core/src/main/scripts && ./dumpPortalInfo.pl \$1" >> /cbioportal/dumpPortalInfo.sh
 
+# don't skip LoH mutations on import
+RUN sed -i 's/\[\x27loh\x27, /[/' /cbioportal/core/src/main/scripts/importer/validateData.py
+
 # switch to non-root user
 USER cbioportal
 ENTRYPOINT ["docker-entrypoint.sh"]
