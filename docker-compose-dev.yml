@@ -77,7 +77,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
     volumes:
      - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
-     - ./data/seed-cbioportal_hg19_v2.7.3.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
+     - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
      - cbioportal_data:/var/lib/mysql
     command:
      - --character-set-server=latin1
