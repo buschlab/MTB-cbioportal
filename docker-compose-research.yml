@@ -15,6 +15,7 @@ services:
      - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
      - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
      - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}
+     - cbioportal_portalinfo:/cbioportal/portalinfo
     depends_on:
      - cbioportal_database
      - cbioportal_session
@@ -165,4 +166,5 @@ networks:
 volumes:
   cbioportal_data:
   cbioportal_session_data:
+  cbioportal_portalinfo:
   genomenexus_data:

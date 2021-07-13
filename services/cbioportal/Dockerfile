@@ -79,4 +79,5 @@ RUN echo "cd /cbioportal/core/src/main/scripts && ./dumpPortalInfo.pl \$1" >> /c
 
 # switch to non-root user
 USER cbioportal
+RUN mkdir /cbioportal/portalinfo
 ENTRYPOINT ["docker-entrypoint.sh"]

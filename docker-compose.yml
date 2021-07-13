@@ -16,6 +16,7 @@ services:
      - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
      - ./config/frontend.json:/cbioportal/frontend.json:ro
      - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}
+     - cbioportal_portalinfo:/cbioportal/portalinfo
     depends_on:
      - cbioportal_database
      - cbioportal_session
@@ -221,5 +222,6 @@ networks:
 volumes:
   cbioportal_data:
   cbioportal_session_data:
+  cbioportal_portalinfo:
   fhir_data:
   genomenexus_data:
