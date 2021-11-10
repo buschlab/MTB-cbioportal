@@ -1,4 +1,4 @@
-FROM mariadb:10.6.4 as builder
+FROM mariadb:10.7.1 as builder
 
 # That file does the DB initialization but also runs mysql daemon, by removing the last line it will only init
 # RUN ["sed", "-i", "s/exec \"$@\"/echo \"not running $@\"/", "/usr/local/bin/docker-entrypoint.sh"]
@@ -24,7 +24,7 @@ RUN gunzip *.gz
 #       it has been declared, those changes will be discarded.
 RUN ["/home/docker-entrypoint.sh", "mysqld", "--datadir", "/initialized-db", "--aria-log-dir-path", "/initialized-db"]
 
-FROM mariadb:10.6.4
+FROM mariadb:10.7.1
 LABEL maintainer="Niklas Reimer <niklas.reimer@uksh.de>"
 
 COPY --from=builder /initialized-db /var/lib/mysql

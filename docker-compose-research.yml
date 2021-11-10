@@ -60,7 +60,7 @@ services:
     ]
   cbioportal_database:
     restart: unless-stopped
-    image: mariadb:10.6.4
+    image: mariadb:10.7.1
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
