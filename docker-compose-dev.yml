@@ -136,7 +136,7 @@ services:
       - cbioportal_net
   hapiserver:
     restart: unless-stopped
-    image: hapiproject/hapi:v5.5.2
+    image: hapiproject/hapi:v5.6.0
     container_name: cbioportal_fhirspark_hapiserver
     ports:
       - "8082:8080"
