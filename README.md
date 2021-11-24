@@ -81,7 +81,7 @@ zcat public-portal-dump.latest.sql.gz | sudo docker-compose exec -T cbioportal_d
 
 ## Ports
 
-| Dienst | Path (hinter NGINX) | Port (docker-compose-dev.yml) | Image |
+| Service | Path (behind NGINX) | Port (docker-compose-dev.yml) | Image |
 | - | - | - | - |
 | NGINX  | / | 8080 | ghcr.io/buschlab/cbioroxy |
 | cBioPortal | / | 8081 | ghcr.io/buschlab/cbioportal |
