@@ -15,7 +15,7 @@ You also may want to use OncoKB, which requires a token that can be obtained [he
 
 Start the initialization process once to setup config file and download seed database:
 ```
-sudo docker-compose -f init.yml run --rm
+sudo docker-compose -f init.yml run --rm cbioportal
 ```
 
 There are three different *flavors* of MIRACUM-cbioportal available: 
