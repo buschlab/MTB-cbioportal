@@ -18,6 +18,12 @@ Check the application in your browser at http://localhost:3838
 
 ## Deploy the cbpManager and ShinyProxy via docker-compose:
 
+IMPORTANT: To change the default study directory to a custom study directory, you have to edit the line 18 of services/shinyproxy/application.yml and replace "/PATH/TO/CUSTOM/STUDY_DIR/" with the path to the study directory.
+
+**container-volumes: ["/PATH/TO/CUSTOM/STUDY_DIR/:/srv/shiny-server/study/"]**
+
+
+
 To use cbpManager with an authentication system you should deploy cbpManager with ShinyProxy. ShinyProxy offers different methods of authentication (see [https://www.shinyproxy.io/configuration/#authentication](https://www.shinyproxy.io/configuration/#authentication)).
 Modify the `authentication` and `users` sections of the `services/shinyproxy/application.yml` file according to the description on the ShinyProxy page. 
 

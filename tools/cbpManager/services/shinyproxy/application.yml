@@ -15,15 +15,9 @@ proxy:
   - id: cbpmanager
     display-name: Data manager for cBioPortal studies
     container-image: harbor.miracum.org/cbpmanager/cbpmanager
+    container-volumes: ["/PATH/TO/CUSTOM/STUDY_DIR/:/srv/shiny-server/study/"]
     container-network: "${proxy.docker.container-network}"
-logging:
-  file:
-    /log/shinyproxy.log
 
 server:
   servlet:
     context-path: /
-    #context-path:  /cbpmanager
-    #useForwardHeaders: true
-    #servlet:
-    #  context-path: /cbpmanager
