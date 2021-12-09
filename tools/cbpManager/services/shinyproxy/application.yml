@@ -8,6 +8,15 @@ proxy:
   users:
   - name: admin
     password: password
+# authentication: keycloak
+# keycloak:
+#   realm: # insert keycloak realm here
+#   auth-server-url: # insert keycloak url here
+#   resource: cbpmanager
+#   credentials-secret: # insert keycloak client secret here
+#   access-groups: cbpmanager # client role configured in keycloak
+#   ssl-required: all
+#   confidential-port: # the port cbpManger is configured to run
   docker:
     internal-networking: true
     container-network: "cbpmanager_cbpmanager_net"
@@ -15,15 +24,9 @@ proxy:
   - id: cbpmanager
     display-name: Data manager for cBioPortal studies
     container-image: harbor.miracum.org/cbpmanager/cbpmanager
+    container-volumes: ["/PATH/TO/CUSTOM/STUDY_DIR/:/srv/shiny-server/study/"] # replalce with path to study directory
     container-network: "${proxy.docker.container-network}"
-logging:
-  file:
-    /log/shinyproxy.log
 
 server:
   servlet:
     context-path: /
-    #context-path:  /cbpmanager
-    #useForwardHeaders: true
-    #servlet:
-    #  context-path: /cbpmanager

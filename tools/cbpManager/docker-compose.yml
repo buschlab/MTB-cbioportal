@@ -1,7 +1,7 @@
 version: "3"
 services:
   cbpmanager:
-    build: ./services/cbpmanager
+    #build: ./services/cbpmanager
     image: harbor.miracum.org/cbpmanager/cbpmanager:latest
     container_name: cbpmanager_container
     networks:
@@ -12,7 +12,7 @@ services:
     command: ['Rscript', '-e', "cbpManager::cbpManager(studyDir = '/srv/shiny-server/study/', logDir = '/srv/shiny-server/logs/', host = '0.0.0.0', port = 3838)"]
   cbpmanager-shinyproxy:
     restart: unless-stopped
-    build: ./services/shinyproxy
+    #build: ./services/shinyproxy
     image: harbor.miracum.org/cbpmanager/cbpmanager-shinyproxy:latest
     container_name: cbpmanager_shinyproxy_container
     ports:
