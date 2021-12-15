@@ -156,6 +156,7 @@ services:
       - ./services/cbioproxy/lua_login_config.lua:/etc/nginx/conf.d/lua_login_config.lua
       - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua
       - ./reports:/usr/share/reports
+      - ./config/attributes.json:/attributes.json
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
       KEYCLOAK_URL: ${KEYCLOAK_URL:-//localhost:8080}
