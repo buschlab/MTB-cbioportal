@@ -72,6 +72,7 @@ services:
     volumes:
      - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
      - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
+     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:ro
      - cbioportal_data:/var/lib/mysql
     command:
      - --character-set-server=latin1
