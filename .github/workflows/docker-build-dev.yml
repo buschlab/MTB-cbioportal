@@ -13,4 +13,4 @@ jobs:
       - name: Build dev containers
         run: docker-compose -f docker-compose-dev.yml build cbioportal
       - name: Build dev cbioproxy
-        run: docker-compose -f docker-compose-dev.yml build nginx
+        run: docker-compose -f docker-compose-dev.yml build cbioproxy

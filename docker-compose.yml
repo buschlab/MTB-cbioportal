@@ -146,10 +146,10 @@ services:
       POSTGRES_DB: hapi
     networks:
       - cbioportal_net
-  nginx:
+  cbioproxy:
     restart: unless-stopped
     image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
-    container_name: cbioportal_nginx_container
+    container_name: cbioproxy_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
       - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf

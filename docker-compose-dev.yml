@@ -104,7 +104,7 @@ services:
   cbioportal-session-database:
     restart: unless-stopped
     image: mongo:3.7.9
-    container_name: cbioportal-session_database-container
+    container_name: cbioportal_session_database_container
     environment:
       MONGO_INITDB_DATABASE: session_service
     volumes:
@@ -167,12 +167,12 @@ services:
       - "5432:5432"
     networks:
       - cbioportal_net
-  nginx:
+  cbioproxy:
     restart: unless-stopped
     image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
     build:
       context: services/cbioproxy
-    container_name: cbioportal_nginx_container
+    container_name: cbioproxy_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
       - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf

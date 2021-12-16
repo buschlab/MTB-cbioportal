@@ -13,4 +13,4 @@ jobs:
       - name: Build care cBioPortal
         run: docker-compose -f docker-compose.yml build cbioportal
       - name: Build care cbioproxy
-        run: docker-compose -f docker-compose.yml build nginx
+        run: docker-compose -f docker-compose.yml build cbioproxy
