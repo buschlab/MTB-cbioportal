@@ -13,7 +13,7 @@
 # (see: stackoverflow.com/questions/56278325)
 FROM maven:3-openjdk-11 as build
 
-ARG VERSION=3.6.16
+ARG VERSION=3.7.20
 
 RUN git clone --single-branch --branch release${VERSION} https://github.com/nr23730/cbioportal-frontend.git /frontend
 WORKDIR /frontend
@@ -21,6 +21,11 @@ RUN mvn clean install
 
 RUN git clone --single-branch --branch v${VERSION} https://github.com/cbioportal/cbioportal.git /cbioportal
 WORKDIR /cbioportal
+
+# don't skip LoH mutations on import
+RUN sed -i 's/|| loh ||/||/' core/src/main/java/org/mskcc/cbio/portal/util/ExtendedMutationUtil.java
+RUN sed -i 's/safeStringTest( mutation.getMutationStatus(), "LOH" )/false/' core/src/main/java/org/mskcc/cbio/portal/scripts/MutationFilter.java
+
 RUN mvn -DskipTests -Dfrontend.version=0.3.0 -Dfrontend.groupId=com.github.cbioportal clean install
 RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
@@ -76,6 +81,9 @@ COPY --from=build /cbioportal/docker/web-and-data/docker-entrypoint.sh /usr/loca
 
 # script for calling dumpPortalInfo.py from docker-compose
 RUN echo "cd /cbioportal/core/src/main/scripts && ./dumpPortalInfo.pl \$1" >> /cbioportal/dumpPortalInfo.sh
+
+# don't skip LoH mutations on import
+RUN sed -i 's/\[\x27loh\x27, /[/' /cbioportal/core/src/main/scripts/importer/validateData.py
 
 # switch to non-root user
 USER cbioportal

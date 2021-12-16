@@ -1,5 +1,6 @@
 data/*.sql
 data/*.sql.gz
+!data/tableExtension.sql
 config/portal.properties
 config/client-tailored-saml-idp-metadata.xml
 *.jks

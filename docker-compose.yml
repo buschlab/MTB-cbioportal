@@ -19,7 +19,7 @@ services:
      - cbioportal_portalinfo:/cbioportal/portalinfo
     depends_on:
      - cbioportal_database
-     - cbioportal_session
+     - cbioportal-session
     networks:
      - cbioportal_net
     command: [ 
@@ -30,7 +30,7 @@ services:
       "-Doncokb.token=${ONCOKB_TOKEN}",
       "-Dgenomenexus.url=/genome-nexus",
       "-Dauthenticate=${AUTHENTICATE:-noauthsessionservice}",
-      "-Dsession.service.url=http://cbioportal_session:5000/api/sessions/my_portal/",
+      "-Dsession.service.url=http://cbioportal-session:5000/api/sessions/my-portal/",
       "-Dshow.civic=${ENABLE_CIVIC:-true}",
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-false}",
       "-Dquick_search.enabled=${ENABLE_QUICKSEARCH:-true}",
@@ -72,24 +72,25 @@ services:
     volumes:
      - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
      - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
+     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:ro
      - cbioportal_data:/var/lib/mysql
     command:
      - --character-set-server=latin1
      - --collation-server=latin1_swedish_ci
     networks:
      - cbioportal_net
-  cbioportal_session:
+  cbioportal-session:
     restart: unless-stopped
-    image: cbioportal/session-service:0.3.0
+    image: cbioportal/session-service:0.5.0
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
-      JAVA_OPTS: -Dspring.data.mongodb.uri=mongodb://cbioportal_session_database:27017/session-service
+      JAVA_OPTS: -Dspring.data.mongodb.uri=mongodb://cbioportal-session-database:27017/session-service
     depends_on:
-      - cbioportal_session_database
+      - cbioportal-session-database
     networks:
       - cbioportal_net
-  cbioportal_session_database:
+  cbioportal-session-database:
     restart: unless-stopped
     image: mongo:3.7.9
     container_name: cbioportal_session_database_container
@@ -135,7 +136,7 @@ services:
       - cbioportal_net
   hapi-postgres:
     restart: unless-stopped
-    image: postgres:13.5-alpine
+    image: postgres:14.1-alpine
     container_name: cbioportal_fhirspark_database
     volumes:
       - fhir_data:/var/lib/postgresql/data
@@ -145,10 +146,10 @@ services:
       POSTGRES_DB: hapi
     networks:
       - cbioportal_net
-  nginx:
+  cbioproxy:
     restart: unless-stopped
     image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
-    container_name: cbioportal_nginx_container
+    container_name: cbioproxy_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
       - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf
