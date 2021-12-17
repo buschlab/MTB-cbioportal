@@ -40,6 +40,33 @@ sudo docker-compose -f docker-compose-dev.yml build <service>
 
 Such are marked in the table.
 
+## Upgrading from previous releases
+
+When upgrading MIRACUM-cBioPortal we *highly* suggest that you purge the volumes for cBioPortal and Genome Nexus. This will **delete all data that is imported into cBioPortal**. Studies should then be re-imported after the upgrade process.
+
+The upgrade process should then include the following steps:
+
+1. Make a Backup of the HAPI FHIR database using `sudo docker-compose exec hapi-postgres pg_dumpall -U hapiserver > dump.sql`
+2. Update the git repository
+3. Stop all services using `sudo docker-compose down`
+4. Delete cBioPortal and Genome Nexus volumes `sudo docker volume rm -f miracum-cbioportal_cbioportal_data miracum-cbioportal_genomenexus_data`
+5. Check `.env.example` file for new parameters you may want to use
+6. Set the `RELEASE` in the `.env` file to the release you want to install
+  If your selected release is `latest` make sure you use the latest images by executing `sudo docker-compose pull`
+7. Start MIRACUM-cBioPortal using `sudo docker-compose up -d`
+
+After the first start of an upgraded MIRACUM-cBioPortal, please check the logs of the Postgres server using `sudo docker-compose logs hapi-postgres`.
+
+You may see something like this:
+```
+cbioportal_fhirspark_database  | 2021-12-16 09:28:26.055 UTC [1] FATAL:  database files are incompatible with server
+cbioportal_fhirspark_database  | 2021-12-16 09:28:26.055 UTC [1] DETAIL:  The data directory was initialized by PostgreSQL version 13, which is not compatible with this version 14.1.
+cbioportal_fhirspark_database exited with code 1
+```
+
+This is caused by an upgrade to a new major version of Postgres which a requires an additional step, where the volume will be dumped and the dump from step 1 will be imported.
+In this case just execute the migration script with `sudo ./upgradePostgres.sh`
+
 ### Importing studies
 
 ```
