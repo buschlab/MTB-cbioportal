@@ -133,7 +133,6 @@ services:
       "-Dgenexrefs.url=http://ensembl-rest:3000/xrefs/id/ACCESSION?content-type=application/json",
       "-Densembl.sequence.url=http://localhost:3000/sequence/region/human/QUERY?content-type=application/json",
       "-DmutationAssessor.url=http://127.0.0.1/VARIANT&frm=json&fts=input,rgaa,rgvt,msa,pdb,F_impact,F_score,vc_score,vs_score,info,var,gene,uprot,rsprot,gaps,msa_height,chr,rs_pos,rs_res,up_pos,up_res,cnt_cosmic,cnt_snps",
-      "-Dmyvariantinfo.url=http://127.0.0.1/VARIANT",
       "-jar",
       "/app/genome-nexus.war"
     ]
