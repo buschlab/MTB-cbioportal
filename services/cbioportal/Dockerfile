@@ -13,7 +13,7 @@
 # (see: stackoverflow.com/questions/56278325)
 FROM maven:3-openjdk-11 as build
 
-ARG VERSION=3.7.20
+ARG VERSION=3.7.27
 
 RUN git clone --single-branch --branch release${VERSION} https://github.com/nr23730/cbioportal-frontend.git /frontend
 WORKDIR /frontend
