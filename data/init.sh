@@ -1,2 +1,2 @@
 # Download the seed database
-wget -O "https://raw.githubusercontent.com/cBioPortal/cbioportal/v3.6.10/db-scripts/src/main/resources/cgds.sql" && wget -O "https://github.com/cBioPortal/datahub/raw/master/seedDB/seed-cbioportal_hg19_v2.12.8.sql.gz"
+wget "https://raw.githubusercontent.com/cBioPortal/cbioportal/v3.6.10/db-scripts/src/main/resources/cgds.sql" -O cgds.sql && wget "https://github.com/cBioPortal/datahub/raw/master/seedDB/seed-cbioportal_hg19_v2.12.8.sql.gz" -O seed-cbioportal_hg19_v2.12.8.sql.gz
