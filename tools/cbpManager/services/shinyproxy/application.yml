@@ -28,5 +28,6 @@ proxy:
     container-network: "${proxy.docker.container-network}"
 
 server:
+  servlet.session.timeout:0
   servlet:
     context-path: /
