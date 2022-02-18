@@ -8,3 +8,6 @@ config/client-tailored-saml-idp-metadata.xml
 .env
 !tools/cbpManager/shinyproxy/application.yml
 tools/cbpManager/shinyproxy-logs/*
+study/**
+!study/patient_example/**
+!study/testpatient/**
