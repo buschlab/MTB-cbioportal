@@ -6,10 +6,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+      packages: write
     steps:
       - uses: actions/checkout@v3
-
       - name: Build dev containers
         run: docker-compose -f docker-compose-dev.yml build cbioportal
       - name: Build dev cbioproxy
