@@ -47,6 +47,7 @@ RUN apk add --update \
         python3 \
         python3-dev \
         wget \
+        ca-certificates \
     && rm -rf /var/cache/apk/* \
     && pip3 install wheel
 

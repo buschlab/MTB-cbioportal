@@ -3,6 +3,8 @@ data/*.sql.gz
 !data/tableExtension.sql
 config/portal.properties
 config/client-tailored-saml-idp-metadata.xml
+config/certs/*
+!config/certs/.gitkeep
 *.jks
 **/.DS_Store
 .env
