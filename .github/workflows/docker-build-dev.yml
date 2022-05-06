@@ -16,7 +16,7 @@ jobs:
         run: docker-compose -f docker-compose-dev.yml build cbioproxy
       - name: Login to Docker registry
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
