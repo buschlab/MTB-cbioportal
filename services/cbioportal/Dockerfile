@@ -26,6 +26,9 @@ WORKDIR /cbioportal
 RUN sed -i 's/|| loh ||/||/' core/src/main/java/org/mskcc/cbio/portal/util/ExtendedMutationUtil.java
 RUN sed -i 's/safeStringTest( mutation.getMutationStatus(), "LOH" )/false/' core/src/main/java/org/mskcc/cbio/portal/scripts/MutationFilter.java
 
+# update mysqlclient
+RUN sed -i 's/mysqlclient==1\.3\.13/mysqlclient==2.1.0/' requirements.txt
+
 RUN mvn -DskipTests -Dfrontend.version=0.3.0 -Dfrontend.groupId=com.github.cbioportal clean install
 RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
