@@ -107,10 +107,7 @@ services:
     depends_on:
       - hapiserver
     environment:
-      FHIRSPARK_FHIRBASE: http://hapiserver:8080/fhir/
-      FHIRSPARK_SENDHL7V2: ${HL7V2ENABLE:-false}
-      FHIRSPARK_HL7V2SERVER: ${HL7V2SERVER}
-      FHIRSPARK_HL7V2PORT: ${HL7V2PORT}
+      FHIRSPARK_FHIRBASE: http://hapiserver:8080/fhir
       FHIRSPARK_PORTALURL: http://cbioportal:8080/
       FHIRSPARK_LOGINREQUIRED: ${LOGINREQUIRED:-false}
     volumes:
@@ -125,13 +122,15 @@ services:
     depends_on:
       - hapi-postgres
     environment:
-      hapi.fhir.server_address: "http://hapiserver:8080/fhir/"
+      hapi.fhir.server_address: ${CBIOPORTAL_URL}/fhir
+      hapi.fhir.local_base_url: http://hapiserver:8080/fhir
       hapi.fhir.reuse_cached_search_results_millis: 5000
       hapi.fhir.validation.requests_enabled: 'false'
       spring.datasource.url: "jdbc:postgresql://hapi-postgres:5432/hapi?currentSchema=public"
       spring.datasource.username: hapiserver
       spring.datasource.password: ${POSTGRES_USER_PASSWORD:-P@ssword2}
       spring.datasource.driverClassName: org.postgresql.Driver
+      spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect
     networks:
       - cbioportal_net
   hapi-postgres:
