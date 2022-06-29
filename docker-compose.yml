@@ -157,6 +157,7 @@ services:
       - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua
       - ./reports:/usr/share/reports
       - ./config/attributes.json:/attributes.json
+      - ./data/tumorTypes.json:/tumorTypes.json
       - ./config/certs:/certs
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
