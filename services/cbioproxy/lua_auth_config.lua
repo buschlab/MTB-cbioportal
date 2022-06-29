@@ -1,6 +1,6 @@
 access_by_lua '
   local cbioportalUrl = os.getenv("CBIOPORTAL_URL")
-  local keycloakUrl = os.getenv("CBIOPORTAL_URL")
+  local keycloakUrl = os.getenv("KEYCLOAK_URL")
   local keycloakRealm = os.getenv("KEYCLOAK_REALM")
   local keycloakClient = os.getenv("KEYCLOAK_CLIENT")
   local keycloak_client_secret = os.getenv("KEYCLOAK_SECRET")
