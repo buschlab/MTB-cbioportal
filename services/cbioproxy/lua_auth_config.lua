@@ -8,7 +8,7 @@ access_by_lua '
   local opts = {
     redirect_uri_path = "/mtb/redirect",
     accept_none_alg = false,
-    discovery = keycloakUrl .. "/auth/realms/" .. keycloakRealm .. "/.well-known/openid-configuration/",
+    discovery = keycloakUrl .. "/realms/" .. keycloakRealm .. "/.well-known/openid-configuration/",
     client_id = keycloakClient,
     client_secret = keycloak_client_secret,
     -- ssl_verify = "yes",
@@ -16,7 +16,7 @@ access_by_lua '
     redirect_uri_scheme = "http",
     -- redirect_uri_scheme = "https",
     logout_path = "/mtb/logout",
-    redirect_after_logout_uri = keycloakUrl .. "/auth/realms/" .. keycloakRealm .. "/protocol/openid-connect/logout?client_id=" .. keycloakClient .. "&redirect_uri=" .. cbioportalUrl .. "%2Fmtb%2Flogin",
+    redirect_after_logout_uri = keycloakUrl .. "/realms/" .. keycloakRealm .. "/protocol/openid-connect/logout?client_id=" .. keycloakClient .. "&redirect_uri=" .. cbioportalUrl .. "%2Fmtb%2Flogin",
     redirect_after_logout_with_id_token_hint = false,
     session_contents = {id_token=true, access_token=true}
   }
