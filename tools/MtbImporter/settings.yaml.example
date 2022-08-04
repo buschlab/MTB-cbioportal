@@ -1,0 +1,71 @@
+portalUrl: http://cbioportal:8080
+portalInfo: /cbioportal/portalinfo
+importScriptPath: metaImport.py
+inputFolders:
+  -
+    source: /app/input/
+    target: /app/processed/
+cronIntervall: 60000
+studyFolder: /app/study
+studyTemplate: /app/template
+mainStudyId: MTB
+urlBase: http://localhost:8080/reports
+resourceFolder: /app/reports
+overrideWarnings: true
+restartAfterImport: true
+restartCommand: systemctl restart cbioportal
+ensemblUrl: http://ensembl-rest:3000
+fhir:
+  clinicalDataServerUrl: http://hapiserver:8080/fhir
+  # terminology:
+  #   serverUrl: https://highmed-onto-test01.medfdm.uni-kiel.de/fhir/
+  #   icdO3Url: http://hl7.org/fhir/sid/icd-o-3
+  #   oncoTreeUrl: http://oncotree.mskcc.org/fhir/ValueSet/snapshot
+  #   icdO3ToOncoTreeConceptMapUrl: http://medic.uksh.de/fhir/ConceptMap/ICD-O_to_ONCOTREE
+  #   icdO3ToOncoTreeConceptMapId: icd-o-to-oncotree
+regex:
+    -
+      cbio: "-"
+      his: /
+mappingMethod: groovy
+# mappingMethod: cxx
+mdr:
+   - samply:
+      url: https://mdr.itcr.uni-luebeck.de/v2/api/mdr/
+      sourceNamespace: orbis
+      targetNamespace: cbioportal
+      language: de
+      mappingEnabled: true
+  #  - cxx:
+  #     url: https://my-cxx-mdr/centraxx-mdr-server
+  #     username: cxx-login-user
+  #     password: cxx-login-password
+  #     basicUsername: api-client
+  #     basicPassword: api-client-secret
+  #     mappingEnabled: true
+  #  - dataelementhub:
+  #     url: http://localhost:8090/v1
+  #     tokenUrl: http://mykeycloak/realms/master/protocol/openid-connect/token
+  #     username: admin
+  #     password: Pa55w0rd
+  #     clientId: basicUser
+  #     clientSecret: basicUUID
+  #     sourceNamespace: orbis
+  #     targetNamespace: cbioportal
+  #     language: en
+  #     mappingEnabled: true
+docker:
+  # compose:
+  #   workdir: /Users/nreimer/git/MIRACUM-cbioportal
+  #   serviceName: cbioportal
+  studyFolder:  /study
+  imageName: ghcr.io/buschlab/cbioportal:latest
+  containerName: cbioportal_container
+  networkName: miracum-cbioportal_cbioportal_net
+  propertiesFile: /absolute/path/to/MIRACUM-cbioportal/config/portal.properties
+  portalInfoVolume: miracum-cbioportal_cbioportal_portalinfo
+mapping:
+  -
+    source: orbis_l-tumorboard-molekular
+    target: cbioportal_patient
+    modelClass: de.uzl.lied.mtbimporter.model.ClinicalPatient
