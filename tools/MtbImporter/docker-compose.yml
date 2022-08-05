@@ -8,7 +8,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./settings.yaml:/app/settings.yaml"
       - "./input:/app/input"
-      - "./mapper:/app/mapper"
+      - "./mapper:/mapper"
       - "./processed:/app/processed"
       - "../../study:/app/study"
       - "./template:/app/template"
