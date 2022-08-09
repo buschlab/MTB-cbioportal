@@ -32,7 +32,7 @@ RUN sed -i 's/mysqlclient==1\.3\.13/mysqlclient==2.1.0/' requirements.txt
 RUN mvn -DskipTests -Dfrontend.version=0.3.0 -Dfrontend.groupId=com.github.cbioportal clean install
 RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
 
-FROM alpine:3.16.1
+FROM alpine:3.16.2
 
 # create user for not running image with root privileges
 RUN addgroup -g 1001 -S cbioportal && adduser -u 1001 -S cbioportal -G cbioportal
