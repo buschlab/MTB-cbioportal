@@ -9,6 +9,7 @@ cronIntervall: 60000
 studyFolder: /app/study
 studyTemplate: /app/template
 mainStudyId: MTB
+patientIdName: PID
 urlBase: http://localhost:8080/reports
 resourceFolder: /app/reports
 overrideWarnings: true
