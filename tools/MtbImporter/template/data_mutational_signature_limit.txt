@@ -1,0 +1,32 @@
+ENTITY_STABLE_ID	NAME	DESCRIPTION
+mutational_signature_limit_AC1	AC1	spontaneous deamination
+mutational_signature_limit_AC10	AC10	altered POL E
+mutational_signature_limit_AC11	AC11	alkylating agents, temozolomide
+mutational_signature_limit_AC12	AC12	unknown
+mutational_signature_limit_AC13	AC13	APOBEC
+mutational_signature_limit_AC14	AC14	unknown
+mutational_signature_limit_AC15	AC15	defect DNA MMR
+mutational_signature_limit_AC16	AC16	unknown
+mutational_signature_limit_AC17	AC17	unknown
+mutational_signature_limit_AC18	AC18	unknown
+mutational_signature_limit_AC19	AC19	unknown
+mutational_signature_limit_AC2	AC2	APOBEC
+mutational_signature_limit_AC20	AC20	associated w. small indels at repeats
+mutational_signature_limit_AC21	AC21	unknown
+mutational_signature_limit_AC22	AC22	aristocholic acid
+mutational_signature_limit_AC23	AC23	unknown
+mutational_signature_limit_AC24	AC24	aflatoxin
+mutational_signature_limit_AC25	AC25	unknown
+mutational_signature_limit_AC26	AC26	defect DNA MMR
+mutational_signature_limit_AC27	AC27	unknown
+mutational_signature_limit_AC28	AC28	unknown
+mutational_signature_limit_AC29	AC29	tobacco chewing
+mutational_signature_limit_AC3	AC3	defect DNA DSB repair hom. recomb.
+mutational_signature_limit_AC30	AC30	unknown
+mutational_signature_limit_AC4	AC4	tobacco mutatgens, benzo(a)pyrene
+mutational_signature_limit_AC5	AC5	unknown
+mutational_signature_limit_AC6	AC6	defect DNA MMR, found in MSI tumors
+mutational_signature_limit_AC7	AC7	UV light exposure
+mutational_signature_limit_AC8	AC8	unknown
+mutational_signature_limit_AC9	AC9	POL eta and SHM
+mutational_signature_limit_unassigned	unassigned	unknown

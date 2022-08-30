@@ -13,3 +13,12 @@ tools/cbpManager/shinyproxy-logs/*
 study/**
 !study/patient_example/**
 !study/testpatient/**
+
+reports/**
+!reports/Patient_example/Patient_example/Patient_example_TD.pdf
+
+tools/MtbImporter/processed/**
+!tools/MtbImporter/processed/.gitkeep
+tools/MtbImporter/mapper/**
+!tools/MtbImporter/mapper/.gitkeep
+tools/MtbImporter/settings.yaml
