@@ -28,7 +28,7 @@ services:
       - "8081:8080"
     networks:
      - cbioportal_net
-    command: [ 
+    command: [
       "/usr/bin/java",
       "-Xmx4g",
       "-Xdebug",
@@ -69,7 +69,7 @@ services:
     ]
   cbioportal_database:
     restart: unless-stopped
-    image: mariadb:10.8.2
+    image: docker.io/mariadb:10.8.2
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
@@ -90,7 +90,7 @@ services:
      - cbioportal_net
   cbioportal-session:
     restart: unless-stopped
-    image: cbioportal/session-service:0.5.0
+    image: docker.io/cbioportal/session-service:0.5.0
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
@@ -103,7 +103,7 @@ services:
       - cbioportal_net
   cbioportal-session-database:
     restart: unless-stopped
-    image: mongo:3.7.9
+    image: docker.io/mongo:3.7.9
     container_name: cbioportal_session_database_container
     environment:
       MONGO_INITDB_DATABASE: session_service
@@ -134,7 +134,7 @@ services:
       - cbioportal_net
   hapiserver:
     restart: unless-stopped
-    image: hapiproject/hapi:v6.1.0
+    image: docker.io/hapiproject/hapi:v6.1.0
     container_name: cbioportal_fhirspark_hapiserver
     ports:
       - "8082:8080"
@@ -154,7 +154,7 @@ services:
       - cbioportal_net
   hapi-postgres:
     restart: unless-stopped
-    image: postgres:14.5-alpine
+    image: docker.io/postgres:14.5-alpine
     container_name: cbioportal_fhirspark_database
     volumes:
       - fhir_data:/var/lib/postgresql/data
@@ -236,7 +236,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: nr205/ensembl-rest:${RELEASE:-latest}
+    image: docker.io/nr205/ensembl-rest:109
     restart: unless-stopped
     ports:
       - "8083:3000"
@@ -253,8 +253,8 @@ services:
       - cbioportal_net
 
 networks:
-  cbioportal_net: 
-  
+  cbioportal_net:
+
 volumes:
   cbioportal_data:
   cbioportal_session_data:

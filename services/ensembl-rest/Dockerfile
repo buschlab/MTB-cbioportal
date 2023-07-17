@@ -1,4 +1,4 @@
-FROM ensemblorg/ensembl-vep:release_103
+FROM docker.io/ensemblorg/ensembl-vep:release_109.3
 LABEL maintainer="Niklas Reimer <niklas.reimer@uksh.de>"
 
 USER root
@@ -16,7 +16,9 @@ RUN mv /opt/vep/src/ensembl-rest/ensembl_rest.conf.default /opt/vep/src/ensembl-
 
 EXPOSE 3000
 
-USER vep
+USER root
+
+#RUN chown -R root:root /
 
 WORKDIR /opt/vep/src/ensembl-vep/
 RUN ./INSTALL.pl -n -a cf -s homo_sapiens -y GRCh37

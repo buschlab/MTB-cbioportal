@@ -3,7 +3,7 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: cbioportal/cbioportal:4.1.13
+    image: docker.io/cbioportal/cbioportal:4.1.13
     container_name: cbioportal_container
     environment:
       HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
@@ -21,7 +21,7 @@ services:
      - cbioportal-session
     networks:
      - cbioportal_net
-    command: [ 
+    command: [
       "java",
       "-Xms2g",
       "-Xmx4g",
@@ -60,7 +60,7 @@ services:
     ]
   cbioportal_database:
     restart: unless-stopped
-    image: mariadb:10.8.2
+    image: docker.io/mariadb:10.8.2
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
@@ -79,7 +79,7 @@ services:
      - cbioportal_net
   cbioportal-session:
     restart: unless-stopped
-    image: cbioportal/session-service:0.5.0
+    image: docker.io/cbioportal/session-service:0.5.0
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
@@ -90,7 +90,7 @@ services:
       - cbioportal_net
   cbioportal-session-database:
     restart: unless-stopped
-    image: mongo:3.7.9
+    image: docker.io/mongo:3.7.9
     container_name: cbioportal_session_database_container
     environment:
       MONGO_INITDB_DATABASE: session_service
@@ -165,8 +165,8 @@ services:
       - cbioportal_net
 
 networks:
-  cbioportal_net: 
-  
+  cbioportal_net:
+
 volumes:
   cbioportal_data:
   cbioportal_session_data:

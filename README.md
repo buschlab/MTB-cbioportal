@@ -5,6 +5,9 @@
 - Docker installed
 - Docker-Compose installed (Version 1.26.0 or higher)
 
+If you would like to use another container engine, feel free to do so. All images are OCI compliant and have their respective container registry explicitly named in the compose file. 
+The whole stack was successfully tested using podman and podman-compose. Just replace the `docker-compose [...]` commands listed below with `podman-compose [...]`
+
 ## Installation
 
 We highly recommend to set up your own environment first. This can be done by starting from the example environment: `cp .env.example .env`
