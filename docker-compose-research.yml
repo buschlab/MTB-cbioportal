@@ -150,7 +150,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: nr205/ensembl-rest:109
+    image: nr205/ensembl-rest:110
     restart: unless-stopped
     volumes:
       - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf:Z
