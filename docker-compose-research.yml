@@ -10,12 +10,12 @@ services:
       NO_PROXY: "cbioportal,cbioportal_session"
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
     volumes:
-     - ./study:/study/
-     - ./config/portal.properties:/cbioportal/portal.properties:ro
-     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
-     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
-     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}
-     - cbioportal_portalinfo:/cbioportal/portalinfo
+     - ./study:/study/:z
+     - ./config/portal.properties:/cbioportal/portal.properties:Z
+     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml:Z
+     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks:Z
+     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}:Z
+     - cbioportal_portalinfo:/cbioportal/portalinfo:z
     depends_on:
      - cbioportal_database
      - cbioportal-session
@@ -68,9 +68,9 @@ services:
       MYSQL_USER: cbio
       MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
     volumes:
-     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
-     - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
-     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:ro
+     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:Z
+     - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:Z
+     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:Z
      - cbioportal_data:/var/lib/mysql
     command:
      - --character-set-server=latin1
@@ -105,11 +105,11 @@ services:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
     container_name: cbioproxy_container
     volumes:
-      - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
-      - ./services/cbioproxy/cbioportal-research.conf:/etc/nginx/conf.d/cbioportal.conf
-      - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua
-      - ./reports:/usr/share/reports
-      - ./config/certs:/certs
+      - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:Z
+      - ./services/cbioproxy/cbioportal-research.conf:/etc/nginx/conf.d/cbioportal.conf:Z
+      - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua:Z
+      - ./reports:/usr/share/reports:Z
+      - ./config/certs:/certs:z
     ports:
       - "${PORT:-8080}:8080"
     depends_on:
@@ -150,10 +150,10 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: nr205/ensembl-rest:${RELEASE:-latest}
+    image: nr205/ensembl-rest:109
     restart: unless-stopped
     volumes:
-      - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf
+      - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf:Z
     networks:
       - cbioportal_net
     depends_on:

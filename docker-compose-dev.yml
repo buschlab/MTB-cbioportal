@@ -13,13 +13,13 @@ services:
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
       SHOW_DEBUG_INFO: "true"
     volumes:
-     - ./study:/study/
-     - ./config/portal.properties:/cbioportal/portal.properties:ro
-     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
-     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
-     - ./config/frontend.json:/cbioportal/frontend.json:ro
-     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}
-     - cbioportal_portalinfo:/cbioportal/portalinfo
+     - ./study:/study/:z
+     - ./config/portal.properties:/cbioportal/portal.properties:Z
+     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml:Z
+     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks:Z
+     - ./config/frontend.json:/cbioportal/frontend.json:Z
+     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}:Z
+     - cbioportal_portalinfo:/cbioportal/portalinfo:z
     depends_on:
      - cbioportal_database
      - cbioportal-session
@@ -30,6 +30,7 @@ services:
      - cbioportal_net
     command: [
       "/usr/bin/java",
+      "-Xms2g",
       "-Xmx4g",
       "-Xdebug",
       "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005",
@@ -77,9 +78,9 @@ services:
       MYSQL_USER: cbio
       MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
     volumes:
-     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
-     - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
-     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:ro
+     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:Z
+     - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:Z
+     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:Z
      - cbioportal_data:/var/lib/mysql
     command:
      - --character-set-server=latin1
@@ -122,12 +123,12 @@ services:
     depends_on:
       - hapiserver
     environment:
-      FHIRSPARK_FHIRBASE: http://hapiserver:8080/fhir/
+      FHIRSPARK_FHIRBASE: http://hapiserver:8080/fhir
       FHIRSPARK_PORTALURL: http://cbioportal:8080/
       FHIRSPARK_LOGINREQUIRED: ${LOGINREQUIRED:-false}
     volumes:
-      - ./data/drugs.json:/drugs.json:ro
-      - ./data/hgnc.csv:/hgnc.csv:ro
+      - ./data/drugs.json:/drugs.json:Z
+      - ./data/hgnc.csv:/hgnc.csv:Z
     ports:
       - "3001:3001"
     networks:
@@ -173,17 +174,17 @@ services:
       context: services/cbioproxy
     container_name: cbioproxy_container
     volumes:
-      - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
-      - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf
-      - ./services/cbioproxy/lua_auth_config.lua:/etc/nginx/conf.d/lua_auth_config.lua
-      - ./services/cbioproxy/lua_login_config.lua:/etc/nginx/conf.d/lua_login_config.lua
-      - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua
-      - ./reports:/usr/share/reports
-      - ./config/attributes.json:/attributes.json
-      - ./data/tumorTypes.json:/tumorTypes.json
-      - ./config/certs:/certs
+      - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:Z
+      - ./services/cbioproxy/cbioportal.conf:/etc/nginx/conf.d/cbioportal.conf:Z
+      - ./services/cbioproxy/lua_auth_config.lua:/etc/nginx/conf.d/lua_auth_config.lua:Z
+      - ./services/cbioproxy/lua_login_config.lua:/etc/nginx/conf.d/lua_login_config.lua:Z
+      - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua:Z
+      - ./reports:/usr/share/reports:Z
+      - ./config/attributes.json:/attributes.json:Z
+      - ./data/tumorTypes.json:/tumorTypes.json:Z
+      - ./config/certs:/certs:z
     environment:
-      NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-true}
+      NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
       KEYCLOAK_URL: ${KEYCLOAK_URL:-//localhost:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-master}
       KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT:-fhirspark}
@@ -241,7 +242,7 @@ services:
     ports:
       - "8083:3000"
     volumes:
-      - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf
+      - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf:Z
     networks:
       - cbioportal_net
     depends_on:
