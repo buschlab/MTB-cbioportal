@@ -15,7 +15,7 @@ services:
      - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml:Z
      - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks:Z
      - ./config/frontend.json:/cbioportal/frontend.json:Z
-     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}:Z
+     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-pm4onco.png}:Z
      - cbioportal_portalinfo:/cbioportal/portalinfo:z
     depends_on:
      - cbioportal_database
