@@ -13,6 +13,7 @@ tools/cbpManager/shinyproxy-logs/*
 study/**
 !study/patient_example/**
 !study/testpatient/**
+dump_hapi.sql
 
 reports/**
 !reports/Patient_example/Patient_example/Patient_example_TD.pdf
