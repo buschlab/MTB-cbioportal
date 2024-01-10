@@ -197,7 +197,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus_db:
-    image: ghcr.io/buschlab/genome-nexus-db:${RELEASE:-latest}
+    image: docker.io/genomenexus/gn-mongo:0.31_mutationassessor
     volumes:
       - genomenexus_data:/bitnami/mongodb
     environment:
