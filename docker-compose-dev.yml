@@ -18,7 +18,7 @@ services:
      - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml:Z
      - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks:Z
      - ./config/frontend.json:/cbioportal/frontend.json:Z
-     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-pm4onco.png}:Z
+     - ./config/${LOGO:-pm4onco.png}:/cbioportal-webapp/images/${LOGO:-pm4onco.png}:Z
      - cbioportal_portalinfo:/cbioportal/portalinfo:z
     depends_on:
      - cbioportal_database
@@ -57,7 +57,7 @@ services:
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dfrontend.config=/cbioportal/frontend.json",
-      "-Dskin.right_logo=${LOGO:-miracum.png}",
+      "-Dskin.right_logo=${LOGO:-pm4onco.png}",
       "-cp",
       "/cbioportal-webapp:/cbioportal-webapp/lib/*",
       "org.cbioportal.PortalApplication",
