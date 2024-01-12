@@ -9,9 +9,10 @@ services:
       HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
       NO_PROXY: "cbioportal,cbioportal_session"
       DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
+      SHOW_DEBUG_INFO: "true"
     volumes:
      - ./study:/study/:z
-     - ./config/portal.properties:/cbioportal/portal.properties:Z
+     - ./config/portal.properties:/cbioportal/application.properties:Z
      - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml:Z
      - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks:Z
      - ./config/frontend.json:/cbioportal/frontend.json:Z
@@ -29,7 +30,6 @@ services:
       "-Doncokb.public_api.url=${ONCOKB_URL:-https://public.api.oncokb.org/api/v1}",
       "-Doncokb.token=${ONCOKB_TOKEN}",
       "-Dgenomenexus.url=/genome-nexus",
-      "-Dauthenticate=${AUTHENTICATE:-noauthsessionservice}",
       "-Dsession.service.url=http://cbioportal-session:5000/api/sessions/my-portal/",
       "-Dshow.civic=${ENABLE_CIVIC:-true}",
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-false}",
@@ -51,14 +51,11 @@ services:
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dfrontend.config=/cbioportal/frontend.json",
       "-Dskin.right_logo=${LOGO:-miracum.png}",
-      "-jar",
-      "/webapp-runner.jar",
-      "-AmaxHttpHeaderSize=16384",
-      "-AconnectionTimeout=20000",
-      "--enable-compression",
-      "--proxy-base-url",
-      "${CBIOPORTAL_URL}",
-      "/cbioportal-webapp"
+      "-cp",
+      "/cbioportal-webapp:/cbioportal-webapp/lib/*",
+      "org.cbioportal.PortalApplication",
+      "--spring.config.location=cbioportal/application.properties",
+      "--authenticate=${AUTHENTICATE:-false}"
     ]
   cbioportal_database:
     restart: unless-stopped
@@ -71,17 +68,18 @@ services:
       MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
     volumes:
      - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:Z
-     - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:Z
+     - ./data/seed-cbioportal_hg19_hg38_v2.13.1.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:Z
      - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:Z
      - cbioportal_data:/var/lib/mysql
     command:
      - --character-set-server=latin1
      - --collation-server=latin1_swedish_ci
+     - --innodb_buffer_pool_size=${INNODB_BUFFER_POOL_SIZE:-100M}
     networks:
      - cbioportal_net
   cbioportal-session:
     restart: unless-stopped
-    image: docker.io/cbioportal/session-service:0.5.0
+    image: docker.io/cbioportal/session-service:0.6.1
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
@@ -92,7 +90,7 @@ services:
       - cbioportal_net
   cbioportal-session-database:
     restart: unless-stopped
-    image: docker.io/mongo:3.7.9
+    image: docker.io/mongo:4.2
     container_name: cbioportal_session_database_container
     environment:
       MONGO_INITDB_DATABASE: session_service
