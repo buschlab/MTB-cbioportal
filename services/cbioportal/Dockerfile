@@ -19,7 +19,7 @@ RUN git clone --single-branch --branch release$VERSION https://github.com/nr2373
 WORKDIR /frontend
 RUN mvn clean install
 
-RUN git clone --single-branch --branch dockerSpringEntrypoint https://github.com/nr23730/cbioportal.git /cbioportal
+RUN git clone --single-branch --branch pm4onco https://github.com/nr23730/cbioportal.git /cbioportal
 WORKDIR /cbioportal
 RUN cp /cbioportal/src/main/resources/application.properties.EXAMPLE /cbioportal/src/main/resources/application.properties
 
@@ -90,13 +90,14 @@ ARG DEPENDENCY=/cbioportal/target/dependency
 RUN mkdir -p $PORTAL_WEB_HOME
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib                $PORTAL_WEB_HOME/lib/
 COPY --from=build ${DEPENDENCY}/META-INF                    $PORTAL_WEB_HOME/META-INF/
-COPY --from=build ${DEPENDENCY}/BOOT-INF/classes             $PORTAL_WEB_HOME/
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes            $PORTAL_WEB_HOME/
 
 # add entrypoint
 COPY --from=build /cbioportal/docker/web-and-data/docker-entrypoint.sh /usr/local/bin/
 
 # script for calling dumpPortalInfo.py from docker-compose
 RUN echo "cd /core/scripts && ./dumpPortalInfo.pl \$1" >> /cbioportal/dumpPortalInfo.sh
+RUN chmod +x /cbioportal/dumpPortalInfo.sh
 
 # don't skip LoH mutations on import
 RUN sed -i 's/\[\x27loh\x27, /[/' /core/scripts/importer/validateData.py

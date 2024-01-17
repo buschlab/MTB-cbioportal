@@ -2,6 +2,8 @@ data/*.sql
 data/*.sql.gz
 !data/tableExtension.sql
 config/portal.properties
+config/application.properties
+config/security.properties
 config/client-tailored-saml-idp-metadata.xml
 config/certs/*
 !config/certs/.gitkeep
@@ -14,6 +16,7 @@ study/**
 !study/patient_example/**
 !study/testpatient/**
 dump_hapi.sql
+config/keycloak.cer
 
 reports/**
 !reports/Patient_example/Patient_example/Patient_example_TD.pdf

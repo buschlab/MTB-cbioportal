@@ -12,12 +12,13 @@ services:
       SHOW_DEBUG_INFO: "true"
     volumes:
      - ./study:/study/:z
-     - ./config/portal.properties:/cbioportal/application.properties:Z
-     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml:Z
-     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks:Z
+     - ./config/application.properties:/cbioportal/application.properties:Z
+     - ./config/security.properties:/cbioportal/security.properties:Z
      - ./config/frontend.json:/cbioportal/frontend.json:Z
      - ./config/${LOGO:-pm4onco.png}:/cbioportal-webapp/webapp/images/${LOGO:-pm4onco.png}:Z
+     - ./config/keycloak.cer:/cbioportal/keycloak.cer:z
      - cbioportal_portalinfo:/cbioportal/portalinfo:z
+     - ./config/certs:/certs:z
     depends_on:
      - cbioportal_database
      - cbioportal-session
@@ -35,27 +36,21 @@ services:
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-false}",
       "-Dquick_search.enabled=${ENABLE_QUICKSEARCH:-true}",
       "-Dfilter_groups_by_appname=false",
-      "-Dsaml.sp.metadata.entityid=cbioportal",
-      "-Dsaml.sp.metadata.entitybaseurl=${CBIOPORTAL_URL}",
-      "-Dsaml.idp.metadata.location=classpath:/client-tailored-saml-idp-metadata.xml",
-      "-Dsaml.idp.metadata.entityid=${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}",
-      "-Dsaml.keystore.location=classpath:/samlKeystore.jks",
-      "-Dsaml.keystore.private-key.key=${KEYSTORE_KEY}",
-      "-Dsaml.keystore.password=${KEYSTORE_PASSWORD}",
-      "-Dsaml.keystore.default-key=${KEYSTORE_KEY}",
-      "-Dsaml.keystore.private-key.password=${KEYSTORE_PASSWORD}",
-      "-Dsaml.idp.metadata.attribute.email=email",
-      "-Dsaml.idp.metadata.attribute.role=Role",
-      "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
       "-Dfrontend.config=/cbioportal/frontend.json",
       "-Dskin.right_logo=${LOGO:-pm4onco.png}",
+      "-Dspring.config.location=cbioportal/application.properties",
+      "-Dauthenticate=${AUTHENTICATE:-false}",
+      "-Dspring.security.oauth2.client.provider.keycloak.user-name-attribute=name",
+      "-Dspring.security.oauth2.client.registration.keycloak.scope=openid,email,roles",
+      "-Dspring.security.oauth2.client.provider.keycloak.issuer-uri=${KEYCLOAK_REALM:-}",
+      "-Dspring.security.oauth2.client.registration.keycloak.client-id=${KEYCLOAK_CLIENT_CBIOPORTAL:-}",
+      "-Dspring.security.oauth2.client.registration.keycloak.client-secret=${KEYCLOAK_SECRET_CBIOPORTAL:-}",
+      "-Dsecurity.cors.allowed-origins=*",
       "-cp",
       "/cbioportal-webapp:/cbioportal-webapp/lib/*",
-      "org.cbioportal.PortalApplication",
-      "--spring.config.location=cbioportal/application.properties",
-      "--authenticate=${AUTHENTICATE:-false}"
+      "org.cbioportal.PortalApplication"
     ]
   cbioportal_database:
     restart: unless-stopped
@@ -156,13 +151,12 @@ services:
       - ./reports:/usr/share/reports:Z
       - ./config/attributes.json:/attributes.json:Z
       - ./data/tumorTypes.json:/tumorTypes.json:Z
-      - ./config/certs:/certs:z
+      - ./config/keycloak.cer:/usr/local/share/ca-certificates/keycloak.cer:z
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
-      KEYCLOAK_URL: ${KEYCLOAK_URL:-//localhost:8080}
-      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-master}
-      KEYCLOAK_CLIENT: ${KEYCLOAK_CLIENT:-fhirspark}
-      KEYCLOAK_SECRET: ${KEYCLOAK_SECRET:-nosecrethere}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-}
+      KEYCLOAK_CLIENT_FHIRSPARK: ${KEYCLOAK_CLIENT_FHIRSPARK:-fhirspark}
+      KEYCLOAK_SECRET_FHIRSPARK: ${KEYCLOAK_SECRET_FHIRSPARK:-nosecrethere}
       CBIOPORTAL_URL: ${CBIOPORTAL_URL:-//localhost:8080}
     ports:
       - "${PORT:-8080}:8080"
