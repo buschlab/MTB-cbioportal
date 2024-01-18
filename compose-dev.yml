@@ -10,7 +10,6 @@ services:
     environment:
       HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
       NO_PROXY: "cbioportal,cbioportal_session"
-      DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
       SHOW_DEBUG_INFO: "true"
     volumes:
      - ./study:/study/:z
