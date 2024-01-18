@@ -17,6 +17,7 @@ study/**
 !study/testpatient/**
 dump_hapi.sql
 config/keycloak.cer
+config/cacerts
 
 reports/**
 !reports/Patient_example/Patient_example/Patient_example_TD.pdf

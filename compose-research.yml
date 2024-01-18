@@ -14,6 +14,7 @@ services:
      - ./config/application.properties:/cbioportal/application.properties:Z
      - ./config/security.properties:/cbioportal/security.properties:Z
      - ./config/${LOGO:-pm4onco.png}:/cbioportal-webapp/webapp/images/${LOGO:-pm4onco.png}:Z
+     - ./config/cacerts:/etc/ssl/certs/java/cacerts:Z
      - cbioportal_portalinfo:/cbioportal/portalinfo:z
     depends_on:
      - cbioportal_database
