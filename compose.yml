@@ -48,6 +48,8 @@ services:
       "-Dspring.security.oauth2.client.registration.keycloak.client-id=${KEYCLOAK_CLIENT_CBIOPORTAL:-}",
       "-Dspring.security.oauth2.client.registration.keycloak.client-secret=${KEYCLOAK_SECRET_CBIOPORTAL:-}",
       "-Dsecurity.cors.allowed-origins=*",
+      "-Dserver.tomcat.remoteip.port-header=X-Forwarded-Port",
+      "-Dserver.tomcat.remoteip.protocol-header=X-Forwarded-Proto",
       "-cp",
       "/cbioportal-webapp:/cbioportal-webapp/lib/*",
       "org.cbioportal.PortalApplication"
