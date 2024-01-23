@@ -40,6 +40,7 @@ services:
       "-Dskin.right_logo=${LOGO:-pm4onco.png}",
       "-Dspring.config.location=cbioportal/application.properties",
       "-Dauthenticate=${AUTHENTICATE:-false}",
+      "-Dalways_show_study_group=${ALWAYS_SHOW_STUDY_GROUP:-none}",
       "-Dspring.security.oauth2.client.provider.keycloak.user-name-attribute=name",
       "-Dspring.security.oauth2.client.registration.keycloak.scope=openid,email,roles",
       "-Dspring.security.oauth2.client.provider.keycloak.issuer-uri=${KEYCLOAK_REALM:-}",
