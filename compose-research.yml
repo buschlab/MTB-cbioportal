@@ -143,7 +143,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: docker.io/nr205/ensembl-rest:110
+    image: docker.io/nr205/ensembl-rest:111
     restart: unless-stopped
     volumes:
       - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf:Z

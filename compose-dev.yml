@@ -231,7 +231,7 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: docker.io/nr205/ensembl-rest:110
+    image: docker.io/nr205/ensembl-rest:111
     restart: unless-stopped
     ports:
       - "8083:3000"
