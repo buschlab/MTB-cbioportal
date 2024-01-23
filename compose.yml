@@ -70,6 +70,8 @@ services:
       MYSQL_DATABASE: cbioportal
       MYSQL_USER: cbio
       MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
+    security_opt:
+      - seccomp:unconfined
     volumes:
      - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:Z
      - ./data/seed-cbioportal_hg19_hg38_v2.13.1.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:Z
