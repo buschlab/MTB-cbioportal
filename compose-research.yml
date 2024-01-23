@@ -107,6 +107,7 @@ services:
     image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
+      PORT: ${PORT:-8080}
     container_name: cbioproxy_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:Z

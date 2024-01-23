@@ -195,6 +195,7 @@ services:
       KEYCLOAK_CLIENT_FHIRSPARK: ${KEYCLOAK_CLIENT_FHIRSPARK:-fhirspark}
       KEYCLOAK_SECRET_FHIRSPARK: ${KEYCLOAK_SECRET_FHIRSPARK:-nosecrethere}
       CBIOPORTAL_URL: ${CBIOPORTAL_URL:-//localhost:8080}
+      PORT: ${PORT:-8080}
     ports:
       - "${PORT:-8080}:8080"
     depends_on:
