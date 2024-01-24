@@ -111,10 +111,9 @@ services:
     container_name: cbioproxy_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:Z
-      - ./services/cbioproxy/cbioportal-research.conf:/etc/nginx/conf.d/cbioportal.conf:Z
+      - ./services/cbioproxy/cbioportal-research.conf:/cbioportal.conf:Z
       - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua:Z
       - ./reports:/usr/share/reports:Z
-      - ./config/certs:/usr/local/share/ca-certificates/:z
     ports:
       - "${PORT:-8080}:8080"
     depends_on:
