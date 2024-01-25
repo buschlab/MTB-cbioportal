@@ -14,8 +14,8 @@ services:
       - "./template:/app/template"
       - "../../reports:/app/reports"
     networks:
-      - miracum-cbioportal_cbioportal_net
+      - mtb-cbioportal_cbioportal_net
 
 networks:
-  miracum-cbioportal_cbioportal_net:
+  mtb-cbioportal_cbioportal_net:
     external: true
