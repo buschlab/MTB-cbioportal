@@ -12,7 +12,7 @@ $CONTAINER rm -f cbioportal_fhirspark
 $CONTAINER rm -f cbioportal_fhirspark_hapiserver
 $CONTAINER rm -f cbioportal_fhirspark_database
 echo 'Removing volume from hapi-postgres'
-$CONTAINER volume rm -f miracum-cbioportal_fhir_data
+$CONTAINER volume rm -f mtb-cbioportal_fhir_data
 echo 'Starting hapi-postgres'
 $CONTAINER-compose up -d hapi-postgres
 echo 'Waiting for hapi-postgres to come up'
