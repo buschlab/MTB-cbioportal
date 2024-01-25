@@ -9,7 +9,6 @@
   "enabled": true,
   "alwaysDisplayInConsole": false,
   "clientAuthenticatorType": "client-secret",
-  "secret": "TJ7tGiSk0mfX7hu9KOVghIXqGnizN3MC",
   "redirectUris": [
     "https://mycbioportal.de/*"
   ],
