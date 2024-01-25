@@ -16,7 +16,7 @@ study/**
 !study/patient_example/**
 !study/testpatient/**
 dump_hapi.sql
-config/keycloak.cer
+config/keycloak.pem
 config/cacerts
 
 reports/**

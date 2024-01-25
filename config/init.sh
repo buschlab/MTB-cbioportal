@@ -7,4 +7,4 @@ cat /cbioportal-webapp/application.properties.EXAMPLE | \
 > application.properties
 cp /cbioportal-webapp/security.properties.EXAMPLE security.properties
 cp /etc/ssl/certs/java/cacerts cacerts
-keytool -import -trustcacerts -keystore cacerts -storepass changeit -noprompt -alias keycloak -file keycloak.cer
+keytool -import -trustcacerts -keystore cacerts -storepass changeit -noprompt -alias keycloak -file keycloak.pem

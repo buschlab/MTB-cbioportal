@@ -163,7 +163,7 @@ services:
       - ./reports:/usr/share/reports:Z
       - ./config/attributes.json:/attributes.json:Z
       - ./data/tumorTypes.json:/tumorTypes.json:Z
-      - ./config/keycloak.cer:/keycloak.cer:z
+      - ./config/keycloak.pem:/keycloak.pem:z
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-}

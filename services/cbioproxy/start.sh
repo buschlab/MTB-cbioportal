@@ -2,9 +2,9 @@
 
 sleep 2
 
-if [ -s /keycloak.cer ]; then
+if [ -s /keycloak.pem ]; then
     echo "Keycloak certificate chain present. Copying to ca store."
-    cp /keycloak.cer /usr/local/share/ca-certificates/keycloak.cer
+    cp /keycloak.pem /usr/local/share/ca-certificates/keycloak.pem
     sed 's/#lua_ssl_trusted_certificate/lua_ssl_trusted_certificate/g' /cbioportal.conf > /etc/nginx/conf.d/cbioportal.conf
     update-ca-certificates
 else
