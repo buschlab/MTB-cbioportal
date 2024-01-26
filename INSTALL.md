@@ -238,7 +238,7 @@ docker-compose exec cbioportal bash /cbioportal/dumpPortalInfo.sh
 
 Importing data must now use the provided portalinfo. The updated import command looks like this
 ```
-docker-compose exec cbioportal metaImport.py -p /cbioportal/portalinfo -s study/Patient_example -o
+docker-compose exec cbioportal metaImport.py -p /cbioportal/portalinfo -s study/patient_example -o
 ```
 
 ## Troubleshooting
