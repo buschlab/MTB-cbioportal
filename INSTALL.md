@@ -77,7 +77,7 @@ When using a remote machine and a rootless container environment like Podman, it
 To import one of the provided test data sets use the following command
 
 ```
-docker-compose exec cbioportal metaImport.py -u http://cbioportal:8080 -s /study/testpatient -o
+docker-compose exec cbioportal metaImport.py -u http://cbioportal:8080 -s study/testpatient -o
 ```
 
 The adress here doesn't require any change, as it's being called from inside the container.
@@ -212,10 +212,33 @@ If data access via tokens to query the API (see docs [here](https://docs.cbiopor
 DATA_ACCESS_TOKEN=oauth2
 ```
 
+Shut down all services using
+```
+docker-compose down
+```
+
 Run the initialization command again, as it will add the Keycloak certificate to the trusted castore for cBioPortal.
 
 ```
 docker-compose -f init.yml run --rm cbioportal
+```
+
+After that start cBioPortal again using
+```
+docker-compose up -d
+```
+
+### 3. Dumping portal info
+
+The import process contains checks against available datasources in cBioPortal. As the enabled authentication blocks direct API access the required data must be exported to disk. For this use the following command
+
+```
+docker-compose exec cbioportal bash /cbioportal/dumpPortalInfo.sh
+```
+
+Importing data must now use the provided portalinfo. The updated import command looks like this
+```
+docker-compose exec cbioportal metaImport.py -p /cbioportal/portalinfo -s study/Patient_example -o
 ```
 
 ## Troubleshooting
