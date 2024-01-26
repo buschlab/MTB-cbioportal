@@ -39,7 +39,7 @@ services:
       "-Dauthenticate=${AUTHENTICATE:-false}",
       "-Dspring.autoconfigure.exclude=${EXCLUDE_AUTOCONFIG:-org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration}",
       "-Dalways_show_study_group=${ALWAYS_SHOW_STUDY_GROUP:-none}",
-      "-Dspring.security.oauth2.client.provider.keycloak.user-name-attribute=name",
+      "-Dspring.security.oauth2.client.provider.keycloak.user-name-attribute=email",
       "-Dspring.security.oauth2.client.registration.keycloak.scope=openid,email,roles",
       "-Dspring.security.oauth2.client.provider.keycloak.issuer-uri=${KEYCLOAK_REALM:-}",
       "-Dspring.security.oauth2.client.registration.keycloak.client-id=${KEYCLOAK_CLIENT_CBIOPORTAL:-}",
