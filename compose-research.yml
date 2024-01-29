@@ -7,7 +7,7 @@ services:
     container_name: cbioportal_container
     environment:
       HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
-      NO_PROXY: "cbioportal,cbioportal_session"
+      NO_PROXY: "cbioportal"
     volumes:
      - ./study:/study/:z
      - ./config/application.properties:/cbioportal/application.properties:Z
@@ -34,6 +34,7 @@ services:
       "-Dfilter_groups_by_appname=false",
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
+      "-Dhttp.nonProxyHosts=cbioportal-session,${NOPROXY_HOSTS:-}",
       "-Dskin.right_logo=${LOGO:-pm4onco.png}",
       "-Dspring.config.location=cbioportal/application.properties",
       "-Dauthenticate=${AUTHENTICATE:-false}",
