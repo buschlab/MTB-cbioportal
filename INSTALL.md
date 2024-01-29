@@ -53,6 +53,14 @@ Please set the password for the databases **now** in the `.env` file. They will 
 docker-compose -f init.yml run --rm cbioportal
 ```
 
+for a network without proxy and
+
+```
+docker-compose -f init.yml run --rm -e https_proxy=http://proxyurl:port cbioportal
+```
+
+for a network with proxy.
+
 This will download the SQL files to initalize the cBioPortal database and also initialize the config file for the database.
 
 ### 4. Starting MTB-cbioportal
