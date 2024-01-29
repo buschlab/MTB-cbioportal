@@ -35,7 +35,7 @@ services:
       "-Dfilter_groups_by_appname=false",
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
-      "-Dhttp.nonProxyHosts=cbioportal-session,${NOPROXY_HOSTS:-}",
+      "-Dhttp.nonProxyHosts=cbioportal-session|${NOPROXY_HOSTS:-}",
       "-Dfrontend.config=/cbioportal/frontend.json",
       "-Dskin.right_logo=${LOGO:-pm4onco.png}",
       "-Dspring.config.location=cbioportal/application.properties",
