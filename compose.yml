@@ -127,15 +127,16 @@ services:
     depends_on:
       - hapi-postgres
     environment:
-      hapi.fhir.server_address: ${CBIOPORTAL_URL}/fhir
-      hapi.fhir.local_base_url: http://hapiserver:8080/fhir
-      hapi.fhir.reuse_cached_search_results_millis: 5000
-      hapi.fhir.validation.requests_enabled: 'false'
-      spring.datasource.url: "jdbc:postgresql://hapi-postgres:5432/hapi?currentSchema=public"
-      spring.datasource.username: hapiserver
-      spring.datasource.password: ${POSTGRES_USER_PASSWORD:-P@ssword2}
-      spring.datasource.driverClassName: org.postgresql.Driver
-      spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect
+      CATALINA_OPTS:  
+        -Dhapi.fhir.server_address=${CBIOPORTAL_URL}/fhir
+        -Dhapi.fhir.local_base_url=http://hapiserver:8080/fhir
+        -Dhapi.fhir.reuse_cached_search_results_millis=5000
+        -Dhapi.fhir.validation.requests_enabled=false
+        -Dspring.datasource.url=jdbc:postgresql://hapi-postgres:5432/hapi?currentSchema=public
+        -Dspring.datasource.username=hapiserver
+        -Dspring.datasource.password=${POSTGRES_USER_PASSWORD:-P@ssword2}
+        -Dspring.datasource.driverClassName=org.postgresql.Driver
+        -Dspring.jpa.properties.hibernate.dialect=ca.uhn.fhir.jpa.model.dialect.HapiFhirPostgres94Dialect
     networks:
       - cbioportal_net
   hapi-postgres:
