@@ -15,7 +15,12 @@ services:
       - "../../reports:/app/reports"
     networks:
       - mtb-cbioportal_cbioportal_net
-
+    entrypoint: [
+      "java",
+      "-Xmx8g",
+      "-jar",
+      "/app/mtbimporter.jar"
+    ]
 networks:
   mtb-cbioportal_cbioportal_net:
     external: true
