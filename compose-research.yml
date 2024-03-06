@@ -84,7 +84,7 @@ services:
      - cbioportal_net
   cbioportal-session:
     restart: unless-stopped
-    image: docker.io/cbioportal/session-service:0.6.1
+    image: docker.io/cbioportal/session-service:0.6.2
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
