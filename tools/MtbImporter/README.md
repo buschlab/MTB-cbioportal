@@ -3,7 +3,7 @@
 MtbImporter is a tool that eases the data integration, management and import of both clinical and mutational data into [cBioPortal](https://cbioportal.org).
 It is tested and optimized to work with the core components of the MIRACUM UseCase 3 *Support for Molecular Tumor Boards*, which are available here:
 
-- [MIRACUM-cBioPortal](https://github.com/buschlab/MIRACUM-cBioPortal)
+- [MTB-cBioPortal](https://github.com/buschlab/MTB-cBioPortal)
 - [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe) (v3.0.0 and upwards)
 
 To account for the huge variety of clinical source systems, this tool relies on csv files as input format and uses Metadata Repositories to store data model descriptions and their relations in a source code independent way.
@@ -33,7 +33,7 @@ If you want to consume FHIR resources, you will need to flatten them first to a 
 General assumption: The tools relies on the fact that the mutation data uses the sample id as identifier and that the patient id can be resolved from a FHIR repository.
 
 For a minimal data model description of cBioPortal that covers all attributes provided by the pipeline see [here](https://mdr.itcr.uni-luebeck.de/view.xhtml?namespace=cbioportal).
-We also provide a working test dataset for both clinical and mutational data [here](https://github.com/buschlab/MIRACUM-cbioportal/tree/master/tools/MtbImporter/testdata). 
+We also provide a working test dataset for both clinical and mutational data [here](https://github.com/buschlab/MTB-cbioportal/tree/master/tools/MtbImporter/testdata). 
 
 To get started, copy the `settings.yaml.example` file to `settings.yaml`. This avoids future conflicts within the git tree. You need to tailor the configuration parameters to fit your environment first. The following configuration parameters are available:
 

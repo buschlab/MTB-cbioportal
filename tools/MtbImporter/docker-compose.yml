@@ -8,14 +8,19 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./settings.yaml:/app/settings.yaml"
       - "./input:/app/input"
-      - "./mapper:/mapper"
+      - "./mapper:/app/mapper"
       - "./processed:/app/processed"
       - "../../study:/app/study"
       - "./template:/app/template"
       - "../../reports:/app/reports"
     networks:
-      - miracum-cbioportal_cbioportal_net
-
+      - mtb-cbioportal_cbioportal_net
+    entrypoint: [
+      "java",
+      "-Xmx8g",
+      "-jar",
+      "/app/mtbimporter.jar"
+    ]
 networks:
-  miracum-cbioportal_cbioportal_net:
+  mtb-cbioportal_cbioportal_net:
     external: true

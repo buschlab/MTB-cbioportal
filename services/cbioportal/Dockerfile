@@ -11,28 +11,31 @@
 # NOTE: the .git folder is included in the build stage, but excluded 
 # from the final image. No confidential information is exposed.
 # (see: stackoverflow.com/questions/56278325)
-FROM maven:3-openjdk-11 as build
+FROM docker.io/maven:3-eclipse-temurin-21 as build
 
-ARG VERSION=4.1.13
+ARG VERSION=6.0.0
 
-RUN git clone --single-branch --branch release${VERSION} https://github.com/nr23730/cbioportal-frontend.git /frontend
+RUN git clone --single-branch --branch release$VERSION https://github.com/buschlab/cbioportal-frontend.git /frontend
 WORKDIR /frontend
 RUN mvn clean install
 
-RUN git clone --single-branch --branch v${VERSION} https://github.com/cbioportal/cbioportal.git /cbioportal
+RUN git clone --single-branch --branch pm4onco https://github.com/buschlab/cbioportal.git /cbioportal
 WORKDIR /cbioportal
+RUN cp /cbioportal/src/main/resources/application.properties.EXAMPLE /cbioportal/src/main/resources/application.properties
+
+RUN git clone --single-branch --branch pm4onco https://github.com/buschlab/cbioportal-core.git /cbioportal/core
 
 # don't skip LoH mutations on import
 RUN sed -i 's/|| loh ||/||/' core/src/main/java/org/mskcc/cbio/portal/util/ExtendedMutationUtil.java
 RUN sed -i 's/safeStringTest( mutation.getMutationStatus(), "LOH" )/false/' core/src/main/java/org/mskcc/cbio/portal/scripts/MutationFilter.java
 
-# update mysqlclient
-RUN sed -i 's/mysqlclient==1\.3\.13/mysqlclient==2.1.0/' requirements.txt
+RUN mvn -DskipTests -Dfrontend.version=0.3.0 -Dfrontend.groupId=com.github.cbioportal clean install package
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*-exec.jar)
 
-RUN mvn -DskipTests -Dfrontend.version=0.3.0 -Dfrontend.groupId=com.github.cbioportal clean install
-RUN unzip /cbioportal/portal/target/cbioportal*.war -d /unzipped
+WORKDIR /cbioportal/core
+RUN mvn -DskipTests install package
 
-FROM alpine:3.18.4
+FROM docker.io/alpine:3.19.0
 
 # create user for not running image with root privileges
 RUN addgroup -g 1001 -S cbioportal && adduser -u 1001 -S cbioportal -G cbioportal
@@ -44,7 +47,7 @@ RUN apk add --update \
         gcc \
         mariadb-client \
         mariadb-dev \
-        openjdk11-jre-headless \
+        openjdk21-jdk \
         perl \
         py3-pip \
         python3 \
@@ -52,43 +55,55 @@ RUN apk add --update \
         wget \
         ca-certificates \
     && rm -rf /var/cache/apk/* \
-    && pip3 install wheel
+    && pip3 install --break-system-packages wheel
 
 ENV PORTAL_WEB_HOME=/cbioportal-webapp
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 
-RUN mkdir -p /cbioportal && chown -R cbioportal:cbioportal /cbioportal
-RUN mkdir -p /target/tomcat.8080 && chown -R cbioportal:cbioportal /target/tomcat.8080
+RUN mkdir -p /cbioportal && chown -R cbioportal:cbioportal /cbioportal && mkdir /core
 
-COPY --from=build /cbioportal/portal/target/dependency/webapp-runner.jar /webapp-runner.jar
+#Download core files
+#RUN wget https://github.com/cBioPortal/cbioportal-core/releases/download/1.0.4/core-1.0.4.jar -P core/ ; cd core ; jar -xf core-1.0.4.jar scripts/ ; chmod -R a+x scripts/ ; cd ..;
+COPY --from=build /cbioportal/core/target/core-1.0.4.jar /core
+RUN cd /core ; jar -xf core-1.0.4.jar scripts/ ; chmod -R a+x scripts/ ; cd ..;
+RUN sed -i "s/connection_kwargs\['ssl_mode'\] = 'DISABLED'//" /core/scripts/importer/cbioportal_common.py
+
 # copy over core jar and scripts
-COPY --from=build /cbioportal/core /cbioportal/core
-COPY --from=build /cbioportal/scripts /cbioportal/scripts
-COPY --from=build /cbioportal/db-scripts /cbioportal/db-scripts
+COPY --from=build /cbioportal/src/main/resources/db-scripts /cbioportal/db-scripts
 COPY --from=build /cbioportal/requirements.txt /cbioportal/requirements.txt
 
 # install build and runtime dependencies
 # ignore update failures
-RUN  pip3 install -r /cbioportal/requirements.txt
+RUN  pip3 install --break-system-packages -r /cbioportal/requirements.txt
 
 # add importer scripts to PATH for easy running in containers
-RUN find /cbioportal/core/src/main/scripts/ -type f -executable \! -name '*.pl'  -print0 | xargs -i -- ln -s {} /usr/local/bin
+RUN find /core/scripts/ -type f -executable \! -name '*.pl'  -print0 | xargs -i -- ln -s {} /usr/local/bin
 
 # put config files in this folder if you want to override config
 ENV PORTAL_HOME=/cbioportal
 
 RUN mkdir -p $PORTAL_WEB_HOME
-COPY --from=build /unzipped $PORTAL_WEB_HOME
+
+# add exploded Spring Boot jar contents to image
+# See: https://spring.io/guides/topicals/spring-boot-docker/
+ARG DEPENDENCY=/cbioportal/target/dependency
+RUN mkdir -p $PORTAL_WEB_HOME
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib                $PORTAL_WEB_HOME/lib/
+COPY --from=build ${DEPENDENCY}/META-INF                    $PORTAL_WEB_HOME/META-INF/
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes            $PORTAL_WEB_HOME/
 
 # add entrypoint
 COPY --from=build /cbioportal/docker/web-and-data/docker-entrypoint.sh /usr/local/bin/
 
 # script for calling dumpPortalInfo.py from docker-compose
-RUN echo "cd /cbioportal/core/src/main/scripts && ./dumpPortalInfo.pl \$1" >> /cbioportal/dumpPortalInfo.sh
+RUN echo "cd /core/scripts && ./dumpPortalInfo.pl /cbioportal/portalinfo" >> /cbioportal/dumpPortalInfo.sh
 RUN chmod +x /cbioportal/dumpPortalInfo.sh
 
 # don't skip LoH mutations on import
-RUN sed -i 's/\[\x27loh\x27, /[/' /cbioportal/core/src/main/scripts/importer/validateData.py
+RUN sed -i 's/\[\x27loh\x27, /[/' /core/scripts/importer/validateData.py
+
+# don't make column smaller
+RUN sed -i "s/ALTER TABLE \`clinical\_event\_data\` MODIFY COLUMN \`VALUE\` varchar(3000) NOT NULL;//g" /cbioportal/db-scripts/migration.sql
 
 # switch to non-root user
 USER cbioportal

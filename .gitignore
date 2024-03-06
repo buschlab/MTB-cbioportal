@@ -2,6 +2,8 @@ data/*.sql
 data/*.sql.gz
 !data/tableExtension.sql
 config/portal.properties
+config/application.properties
+config/security.properties
 config/client-tailored-saml-idp-metadata.xml
 config/certs/*
 !config/certs/.gitkeep
@@ -13,6 +15,9 @@ tools/cbpManager/shinyproxy-logs/*
 study/**
 !study/patient_example/**
 !study/testpatient/**
+dump_hapi.sql
+config/keycloak.pem
+config/cacerts
 
 reports/**
 !reports/Patient_example/Patient_example/Patient_example_TD.pdf

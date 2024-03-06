@@ -3,83 +3,88 @@ version: '3'
 services:
   cbioportal:
     restart: unless-stopped
-    image: cbioportal/cbioportal:4.1.13
+    image: docker.io/cbioportal/cbioportal:6.0.0
     container_name: cbioportal_container
     environment:
       HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
-      NO_PROXY: "cbioportal,cbioportal_session"
-      DB_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
+      NO_PROXY: "cbioportal"
     volumes:
-     - ./study:/study/
-     - ./config/portal.properties:/cbioportal/portal.properties:ro
-     - ./config/client-tailored-saml-idp-metadata.xml:/cbioportal-webapp/WEB-INF/classes/client-tailored-saml-idp-metadata.xml
-     - ./config/samlKeystore.jks:/cbioportal-webapp/WEB-INF/classes/samlKeystore.jks
-     - ./config/${LOGO:-miracum.png}:/cbioportal-webapp/images/${LOGO:-miracum.png}
-     - cbioportal_portalinfo:/cbioportal/portalinfo
+     - ./study:/study/:z
+     - ./config/application.properties:/cbioportal/application.properties:Z
+     - ./config/security.properties:/cbioportal/security.properties:Z
+     - ./config/${LOGO:-pm4onco.png}:/cbioportal-webapp/webapp/images/${LOGO:-pm4onco.png}:Z
+     - ./config/cacerts:/etc/ssl/certs/java/cacerts:Z
+     - cbioportal_portalinfo:/cbioportal/portalinfo:z
     depends_on:
      - cbioportal_database
      - cbioportal-session
     networks:
      - cbioportal_net
-    command: [ 
+    command: [
       "java",
       "-Xms2g",
       "-Xmx4g",
       "-Doncokb.public_api.url=${ONCOKB_URL:-https://public.api.oncokb.org/api/v1}",
       "-Doncokb.token=${ONCOKB_TOKEN}",
       "-Dgenomenexus.url=/genome-nexus",
-      "-Dauthenticate=${AUTHENTICATE:-noauthsessionservice}",
       "-Dsession.service.url=http://cbioportal-session:5000/api/sessions/my-portal/",
       "-Dshow.civic=${ENABLE_CIVIC:-true}",
       "-Dmycancergenome.show=${ENABLE_MYCANCERGENOME:-true}",
       "-Dquick_search.enabled=${ENABLE_QUICKSEARCH:-true}",
       "-Dfilter_groups_by_appname=false",
-      "-Dsaml.sp.metadata.entityid=cbioportal",
-      "-Dsaml.sp.metadata.entitybaseurl=${CBIOPORTAL_URL}",
-      "-Dsaml.idp.metadata.location=classpath:/client-tailored-saml-idp-metadata.xml",
-      "-Dsaml.idp.metadata.entityid=${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}",
-      "-Dsaml.keystore.location=classpath:/samlKeystore.jks",
-      "-Dsaml.keystore.private-key.key=${KEYSTORE_KEY}",
-      "-Dsaml.keystore.password=${KEYSTORE_PASSWORD}",
-      "-Dsaml.keystore.default-key=${KEYSTORE_KEY}",
-      "-Dsaml.keystore.private-key.password=${KEYSTORE_PASSWORD}",
-      "-Dsaml.idp.metadata.attribute.email=email",
-      "-Dsaml.idp.metadata.attribute.role=Role",
-      "-Dsaml.custom.userservice.class=org.cbioportal.security.spring.authentication.keycloak.SAMLUserDetailsServiceImpl",
       "-Dhttps.proxyHost=${HTTPS_PROXY_HOST}",
       "-Dhttps.proxyPort=${HTTPS_PROXY_PORT}",
-      "-Dskin.right_logo=${LOGO:-miracum.png}",
-      "-jar",
-      "/webapp-runner.jar",
-      "-AmaxHttpHeaderSize=16384",
-      "-AconnectionTimeout=20000",
-      "--enable-compression",
-      "--proxy-base-url",
-      "${CBIOPORTAL_URL}",
-      "/cbioportal-webapp"
+      "-Dhttp.nonProxyHosts=cbioportal-session|${NOPROXY_HOSTS:-}",
+      "-Dskin.right_logo=${LOGO:-pm4onco.png}",
+      "-Dspring.config.location=cbioportal/application.properties",
+      "-Dauthenticate=${AUTHENTICATE:-false}",
+      "-Dspring.autoconfigure.exclude=${EXCLUDE_AUTOCONFIG:-org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration}",
+      "-Dalways_show_study_group=${ALWAYS_SHOW_STUDY_GROUP:-none}",
+      "-Dspring.security.oauth2.client.provider.keycloak.user-name-attribute=email",
+      "-Dspring.security.oauth2.client.registration.keycloak.scope=openid,email,roles",
+      "-Dspring.security.oauth2.client.provider.keycloak.issuer-uri=${KEYCLOAK_REALM:-}",
+      "-Dspring.security.oauth2.client.registration.keycloak.client-id=${KEYCLOAK_CLIENT_CBIOPORTAL:-}",
+      "-Dspring.security.oauth2.client.registration.keycloak.client-secret=${KEYCLOAK_SECRET_CBIOPORTAL:-}",
+      "-Ddat.method=${DATA_ACCESS_TOKEN:-none}",
+      "-Ddat.oauth2.clientId=${KEYCLOAK_CLIENT_CBIOPORTAL:-}",
+      "-Ddat.oauth2.clientSecret=${KEYCLOAK_SECRET_CBIOPORTAL:-}",
+      "-Ddat.oauth2.issuer=${KEYCLOAK_REALM:-}",
+      "-Ddat.oauth2.accessTokenUri=${KEYCLOAK_REALM:-}/protocol/openid-connect/token",
+      "-Ddat.oauth2.userAuthorizationUri=${KEYCLOAK_REALM:-}/protocol/openid-connect/auth",
+      "-Ddat.oauth2.jwkUrl=${KEYCLOAK_REALM:-}/protocol/openid-connect/certs",
+      "-Ddat.oauth2.redirectUri=${CBIOPORTAL_URL}/api/data-access-token/oauth2",
+      "-Dsecurity.cors.allowed-origins=*",
+      "-Dserver.tomcat.remoteip.port-header=X-Forwarded-Port",
+      "-Dserver.tomcat.remoteip.protocol-header=X-Forwarded-Proto",
+      "-cp",
+      "/cbioportal-webapp:/cbioportal-webapp/lib/*",
+      "org.cbioportal.PortalApplication"
     ]
   cbioportal_database:
     restart: unless-stopped
-    image: mariadb:10.8.2
+    image: docker.io/mariadb:11.2.2
     container_name: cbioportal_database_container
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
       MYSQL_DATABASE: cbioportal
       MYSQL_USER: cbio
       MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD:-P@ssword1}
+    security_opt:
+      - seccomp:unconfined
     volumes:
-     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:ro
-     - ./data/seed-cbioportal_hg19_v2.12.8.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:ro
-     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:ro
+     - ./data/cgds.sql:/docker-entrypoint-initdb.d/cgds.sql:Z
+     - ./data/seed-cbioportal_hg19_hg38_v2.13.1.sql.gz:/docker-entrypoint-initdb.d/seed.sql.gz:Z
+     - ./data/tableExtension.sql:/docker-entrypoint-initdb.d/tableExtension.sql:Z
      - cbioportal_data:/var/lib/mysql
     command:
      - --character-set-server=latin1
      - --collation-server=latin1_swedish_ci
+     - --innodb_buffer_pool_size=${INNODB_BUFFER_POOL_SIZE:-100M}
     networks:
      - cbioportal_net
   cbioportal-session:
     restart: unless-stopped
-    image: cbioportal/session-service:0.5.0
+    image: docker.io/cbioportal/session-service:0.6.1
     container_name: cbioportal_session_container
     environment:
       SERVER_PORT: 5000
@@ -90,7 +95,7 @@ services:
       - cbioportal_net
   cbioportal-session-database:
     restart: unless-stopped
-    image: mongo:3.7.9
+    image: docker.io/mongo:4.2
     container_name: cbioportal_session_database_container
     environment:
       MONGO_INITDB_DATABASE: session_service
@@ -103,13 +108,13 @@ services:
     image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
+      PORT: ${PORT:-8080}
     container_name: cbioproxy_container
     volumes:
-      - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
-      - ./services/cbioproxy/cbioportal-research.conf:/etc/nginx/conf.d/cbioportal.conf
-      - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua
-      - ./reports:/usr/share/reports
-      - ./config/certs:/certs
+      - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:Z
+      - ./services/cbioproxy/cbioportal-research.conf:/cbioportal.conf:Z
+      - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua:Z
+      - ./reports:/usr/share/reports:Z
     ports:
       - "${PORT:-8080}:8080"
     depends_on:
@@ -140,7 +145,7 @@ services:
     networks:
       - cbioportal_net
   genomenexus_db:
-    image: ghcr.io/buschlab/genome-nexus-db:${RELEASE:-latest}
+    image: docker.io/genomenexus/gn-mongo:0.31_mutationassessor
     volumes:
       - genomenexus_data:/bitnami/mongodb
     environment:
@@ -150,10 +155,10 @@ services:
     networks:
       - cbioportal_net
   ensembl-rest:
-    image: nr205/ensembl-rest:${RELEASE:-latest}
+    image: docker.io/nr205/ensembl-rest:111
     restart: unless-stopped
     volumes:
-      - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf
+      - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf:Z
     networks:
       - cbioportal_net
     depends_on:
@@ -165,8 +170,8 @@ services:
       - cbioportal_net
 
 networks:
-  cbioportal_net: 
-  
+  cbioportal_net:
+
 volumes:
   cbioportal_data:
   cbioportal_session_data:
