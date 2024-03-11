@@ -95,7 +95,7 @@ services:
       - cbioportal_net
   cbioportal-session-database:
     restart: unless-stopped
-    image: docker.io/mongo:4.2
+    image: docker.io/mongo:7.0
     container_name: cbioportal_session_database_container
     environment:
       MONGO_INITDB_DATABASE: session_service
