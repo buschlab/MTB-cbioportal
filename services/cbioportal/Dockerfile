@@ -23,7 +23,7 @@ RUN git clone --single-branch --branch pm4onco https://github.com/buschlab/cbiop
 WORKDIR /cbioportal
 RUN cp /cbioportal/src/main/resources/application.properties.EXAMPLE /cbioportal/src/main/resources/application.properties
 
-RUN git clone --single-branch --branch pm4onco https://github.com/buschlab/cbioportal-core.git /cbioportal/core
+RUN git clone --single-branch --branch v1.0.7 https://github.com/cbioportal/cbioportal-core.git /cbioportal/core
 
 # don't skip LoH mutations on import
 RUN sed -i 's/|| loh ||/||/' core/src/main/java/org/mskcc/cbio/portal/util/ExtendedMutationUtil.java
@@ -63,10 +63,9 @@ ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 RUN mkdir -p /cbioportal && chown -R cbioportal:cbioportal /cbioportal && mkdir /core
 
 #Download core files
-#RUN wget https://github.com/cBioPortal/cbioportal-core/releases/download/1.0.4/core-1.0.4.jar -P core/ ; cd core ; jar -xf core-1.0.4.jar scripts/ ; chmod -R a+x scripts/ ; cd ..;
-COPY --from=build /cbioportal/core/target/core-1.0.4.jar /core
-RUN cd /core ; jar -xf core-1.0.4.jar scripts/ ; chmod -R a+x scripts/ ; cd ..;
-RUN sed -i "s/connection_kwargs\['ssl_mode'\] = 'DISABLED'//" /core/scripts/importer/cbioportal_common.py
+COPY --from=build /cbioportal/core/target/core-1.0.7.jar /core
+RUN cd /core ; jar -xf core-1.0.7.jar scripts/ ; chmod -R a+x scripts/ ; cd ..;
+#RUN sed -i "s/connection_kwargs\['ssl_mode'\] = 'DISABLED'//" /core/scripts/importer/cbioportal_common.py
 
 # copy over core jar and scripts
 COPY --from=build /cbioportal/src/main/resources/db-scripts /cbioportal/db-scripts
