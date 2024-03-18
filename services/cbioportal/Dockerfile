@@ -13,13 +13,13 @@
 # (see: stackoverflow.com/questions/56278325)
 FROM docker.io/maven:3-eclipse-temurin-21 as build
 
-ARG VERSION=6.0.0
+ARG VERSION=6.0.4
 
 RUN git clone --single-branch --branch release$VERSION https://github.com/buschlab/cbioportal-frontend.git /frontend
 WORKDIR /frontend
 RUN mvn clean install
 
-RUN git clone --single-branch --branch pm4onco https://github.com/buschlab/cbioportal.git /cbioportal
+RUN git clone --single-branch --branch release$VERSION https://github.com/buschlab/cbioportal.git /cbioportal
 WORKDIR /cbioportal
 RUN cp /cbioportal/src/main/resources/application.properties.EXAMPLE /cbioportal/src/main/resources/application.properties
 
