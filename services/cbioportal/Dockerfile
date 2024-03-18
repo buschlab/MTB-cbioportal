@@ -64,16 +64,15 @@ RUN mkdir -p /cbioportal && chown -R cbioportal:cbioportal /cbioportal && mkdir 
 
 #Download core files
 COPY --from=build /cbioportal/core/target/core-1.0.7.jar /core
-RUN cd /core ; jar -xf core-1.0.7.jar scripts/ ; chmod -R a+x scripts/ ; cd ..;
+RUN cd /core ; jar -xf core-1.0.7.jar scripts/ requirements.txt ; chmod -R a+x scripts/ ; cd ..;
 #RUN sed -i "s/connection_kwargs\['ssl_mode'\] = 'DISABLED'//" /core/scripts/importer/cbioportal_common.py
 
 # copy over core jar and scripts
 COPY --from=build /cbioportal/src/main/resources/db-scripts /cbioportal/db-scripts
-COPY --from=build /cbioportal/requirements.txt /cbioportal/requirements.txt
 
 # install build and runtime dependencies
 # ignore update failures
-RUN  pip3 install --break-system-packages -r /cbioportal/requirements.txt
+RUN  pip3 install --break-system-packages -r /core/requirements.txt
 
 # add importer scripts to PATH for easy running in containers
 RUN find /core/scripts/ -type f -executable \! -name '*.pl'  -print0 | xargs -i -- ln -s {} /usr/local/bin
