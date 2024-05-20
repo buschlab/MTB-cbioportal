@@ -9,7 +9,7 @@ jobs:
     permissions:
       packages: write
     steps:
-      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
       - name: Build dev containers
         run: docker-compose -f compose-dev.yml build cbioportal
       - name: Build dev cbioproxy
