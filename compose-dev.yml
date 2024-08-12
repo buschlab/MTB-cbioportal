@@ -6,6 +6,9 @@ services:
     image: ghcr.io/buschlab/cbioportal:${RELEASE:-latest}
     build:
       context: services/cbioportal
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
     container_name: cbioportal_container
     environment:
       HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
@@ -126,6 +129,9 @@ services:
     image: ghcr.io/buschlab/fhirspark:${RELEASE:-latest}
     build:
       context: services/fhirspark
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"      
     container_name: cbioportal_fhirspark
     depends_on:
       - hapiserver
@@ -180,6 +186,9 @@ services:
     image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
     build:
       context: services/cbioproxy
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
     container_name: cbioproxy_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:Z
@@ -210,6 +219,9 @@ services:
     image: ghcr.io/buschlab/genome-nexus:${RELEASE:-latest}
     build:
       context: services/genome-nexus
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
     ports:
       - "8888:8888"
     environment:
