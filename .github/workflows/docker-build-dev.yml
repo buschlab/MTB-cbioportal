@@ -30,7 +30,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push cbioportal
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-        run: docker compose -f compose-dev.yml push cbioportal
+        run: docker compose -f compose-dev.yml build cbioportal --push
       - name: Push cbioproxy
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-        run: docker compose -f compose-dev.yml push cbioproxy
+        run: docker compose -f compose-dev.yml build cbioproxy --push
