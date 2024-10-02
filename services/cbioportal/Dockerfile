@@ -19,7 +19,7 @@ RUN git clone --single-branch --branch release$VERSION https://github.com/buschl
 WORKDIR /frontend
 RUN mvn clean install
 
-RUN git clone --single-branch --branch release$VERSION https://github.com/cbioportal/cbioportal.git /cbioportal
+RUN git clone --single-branch --branch v$VERSION https://github.com/cbioportal/cbioportal.git /cbioportal
 WORKDIR /cbioportal
 RUN cp /cbioportal/src/main/resources/application.properties.EXAMPLE /cbioportal/src/main/resources/application.properties
 
