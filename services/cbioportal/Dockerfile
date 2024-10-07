@@ -72,7 +72,8 @@ COPY --from=build /cbioportal/src/main/resources/db-scripts /cbioportal/db-scrip
 
 # install build and runtime dependencies
 # ignore update failures
-RUN  pip3 install --break-system-packages -r /core/requirements.txt
+RUN pip3 install --break-system-packages -r /core/requirements.txt
+RUN pip3 install --break-system-packages --upgrade urllib3 requests  
 
 # add importer scripts to PATH for easy running in containers
 RUN find /core/scripts/ -type f -executable \! -name '*.pl'  -print0 | xargs -i -- ln -s {} /usr/local/bin
