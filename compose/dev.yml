@@ -2,7 +2,7 @@ services:
   cbioportal:
     image: ghcr.io/buschlab/cbioportal:${RELEASE:-latest}
     build:
-      context: services/cbioportal
+      context: ./../services/cbioportal
       platforms:
         - "linux/amd64"
         - "linux/arm64"
@@ -67,7 +67,7 @@ services:
       - "27017:27017"
   cbioproxy:
     build:
-      context: services/cbioproxy
+      context: ./../services/cbioproxy
       platforms:
         - "linux/amd64"
         - "linux/arm64"
@@ -89,7 +89,7 @@ services:
     restart: unless-stopped
     image: ghcr.io/buschlab/fhirspark:${RELEASE:-latest}
     build:
-      context: services/fhirspark
+      context: ./../services/fhirspark
       platforms:
         - "linux/amd64"
         - "linux/arm64"
@@ -144,7 +144,7 @@ services:
       - cbioportal_net
   genomenexus:
     build:
-      context: services/genome-nexus
+      context: ./../services/genome-nexus
       platforms:
         - "linux/amd64"
         - "linux/arm64"

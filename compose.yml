@@ -1,3 +1,4 @@
 include:
- - ./compose/base.yml
- - ./compose/${FLAVOR:-care}.yml
+  - path:
+      - ./compose/base.yml
+      - ./compose/${FLAVOR:-care}.yml

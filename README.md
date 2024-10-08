@@ -10,7 +10,7 @@ Installation is described [here](./INSTALL.md)
 
 All images with a `ghcr.io/buschlab/` prefix can be rebuilt using the following command:
 ```
-sudo docker compose -f compose-dev.yml build <service>
+FLAVOR=dev docker compose build <service>
 ```
 
 Such are marked in the table down below.
@@ -53,7 +53,7 @@ The only part that needs a database backup is the HAPI FHIR server. For that ple
 
 ## Ports
 
-| Service | Path (behind OpenResty) | Port (compose-dev.yml) | Image |
+| Service | Path (behind OpenResty) | Port (FLAVOR=dev) | Image |
 | - | - | - | - |
 | OpenResty  | / | 8080 | ghcr.io/buschlab/cbioroxy |
 | cBioPortal | / | 8081 | ghcr.io/buschlab/cbioportal |
