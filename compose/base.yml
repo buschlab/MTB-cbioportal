@@ -1,7 +1,8 @@
 services:
   cbioportal:
-    restart: unless-stopped
     container_name: cbioportal_container
+    pull_policy: always
+    restart: unless-stopped
     environment:
       HTTP_PROXY: "http://${HTTPS_PROXY_HOST}:${HTTPS_PROXY_PORT}"
       NO_PROXY: "cbioportal"
@@ -18,9 +19,9 @@ services:
     networks:
      - cbioportal_net
   cbioportal_database:
-    restart: unless-stopped
-    image: docker.io/mariadb:11.5.2
     container_name: cbioportal_database_container
+    image: docker.io/mariadb:11.5.2
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssword1}
       MYSQL_DATABASE: cbioportal
@@ -40,9 +41,9 @@ services:
     networks:
      - cbioportal_net
   cbioportal-session:
-    restart: unless-stopped
-    image: docker.io/cbioportal/session-service:0.6.1
     container_name: cbioportal_session_container
+    image: docker.io/cbioportal/session-service:0.6.1
+    restart: unless-stopped
     environment:
       SERVER_PORT: 5000
       JAVA_OPTS: -Dspring.data.mongodb.uri=mongodb://cbioportal-session-database:27017/session-service
@@ -51,9 +52,9 @@ services:
     networks:
       - cbioportal_net
   cbioportal-session-database:
-    restart: unless-stopped
-    image: docker.io/mongo:4.2
     container_name: cbioportal_session_database_container
+    image: docker.io/mongo:4.2
+    restart: unless-stopped
     environment:
       MONGO_INITDB_DATABASE: session_service
     volumes:
@@ -61,12 +62,13 @@ services:
     networks:
       - cbioportal_net
   cbioproxy:
-    restart: unless-stopped
+    container_name: cbioproxy_container
     image: ghcr.io/buschlab/cbioproxy:${RELEASE:-latest}
+    pull_policy: always
+    restart: unless-stopped
     environment:
       NGINX_LOGINREQUIRED: ${LOGINREQUIRED:-false}
       PORT: ${PORT:-8080}
-    container_name: cbioproxy_container
     volumes:
       - ./services/cbioproxy/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:Z
       - ./services/cbioproxy/lua_resource_config.lua:/etc/nginx/conf.d/lua_resource_config.lua:Z
@@ -79,10 +81,12 @@ services:
     networks:
       - cbioportal_net
   genomenexus:
+    container_name: genomenexus_container
     image: ghcr.io/buschlab/genome-nexus:${RELEASE:-latest}
+    pull_policy: always
+    restart: unless-stopped
     environment:
       - SERVER_PORT=8888
-    restart: unless-stopped
     depends_on:
       - genomenexus_db
       - ensembl-rest
@@ -102,17 +106,21 @@ services:
       - cbioportal_net
   genomenexus_db:
     image: ghcr.io/buschlab/gn-mongo:0.31
-    volumes:
-      - genomenexus_data:/data/db
+    pull_policy: always
+    restart: unless-stopped
+    container_name: genomenexus_db_container
     environment:
       - REF_ENSEMBL_VERSION=grch37_ensembl92
       - SPECIES=homo_sapiens
-    restart: unless-stopped
+    volumes:
+      - genomenexus_data:/data/db
     networks:
       - cbioportal_net
   ensembl-rest:
     image: docker.io/nr205/ensembl-rest:111
+    pull_policy: always
     restart: unless-stopped
+    container_name: ensembl_rest_container
     volumes:
       - ./config/ensembl_rest.conf:/opt/vep/src/ensembl-rest/ensembl_rest.conf:Z
     networks:
@@ -121,7 +129,9 @@ services:
       - ensembl-mysql
   ensembl-mysql:
     image: ghcr.io/buschlab/ensembl-mysql:latest
+    pull_policy: always
     restart: unless-stopped
+    container_name: ensembl_mysql_container
     networks:
       - cbioportal_net
 
