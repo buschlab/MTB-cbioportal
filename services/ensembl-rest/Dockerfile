@@ -17,12 +17,8 @@ RUN mv /opt/vep/src/ensembl-rest/ensembl_rest.conf.default /opt/vep/src/ensembl-
 
 EXPOSE 3000
 
-USER root
-
-RUN chown -R root:root /root
-
 WORKDIR /opt/vep/src/ensembl-vep/
-RUN ./INSTALL.pl -n -a cf -s homo_sapiens -y GRCh37 && mv /root/.vep /opt/vep/
+RUN ./INSTALL.pl -n -a cf -s homo_sapiens -y GRCh37 && mv /root/.vep /opt/vep/ && chown -R root:root /
 
 ENTRYPOINT ["perl", "/opt/vep/src/ensembl-rest/script/ensembl_rest_server.pl"]
 
