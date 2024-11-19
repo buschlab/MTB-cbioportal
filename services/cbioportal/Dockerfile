@@ -99,7 +99,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes            $PORTAL_WEB_HOME/
 # add entrypoint
 COPY --from=build /cbioportal/docker/web-and-data/docker-entrypoint.sh /usr/local/bin/
 
-# script for calling dumpPortalInfo.py from docker-compose
+# script for calling dumpPortalInfo.py from docker compose
 RUN echo "cd /core/scripts && ./dumpPortalInfo.pl /cbioportal/portalinfo" >> /cbioportal/dumpPortalInfo.sh
 RUN chmod +x /cbioportal/dumpPortalInfo.sh
 
