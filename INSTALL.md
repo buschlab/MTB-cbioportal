@@ -205,9 +205,8 @@ Replace the `keycloak.pem` file in the `config` directory with the webserver cer
 LOGINREQUIRED=true
 AUTHENTICATE=oauth2
 EXCLUDE_AUTOCONFIG=
-KEYCLOAK_URL=https://mykeycloak.de
 CBIOPORTAL_URL=https://mycbioportal.de
-KEYCLOAK_REALM=mtb
+KEYCLOAK_REALM=https://mykeycloak.de/auth/realms/mtb
 KEYCLOAK_CLIENT_CBIOPORTAL=cbioportal
 KEYCLOAK_SECRET_CBIOPORTAL=mysecret
 KEYCLOAK_CLIENT_FHIRSPARK=fhirspark
