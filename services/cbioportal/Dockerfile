@@ -17,6 +17,7 @@ ARG VERSION=6.4.4
 
 RUN git clone --single-branch --branch release$VERSION https://github.com/pm4onco/cbioportal-frontend.git /frontend
 WORKDIR /frontend
+ENV YARN_NETWORK_TIMEOUT=600000
 RUN mvn clean install -Dgpg.skip=true
 
 RUN git clone --single-branch --branch v$VERSION https://github.com/cbioportal/cbioportal.git /cbioportal
