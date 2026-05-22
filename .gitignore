@@ -1,3 +1,4 @@
+compose.override.yml
 data/*.sql
 data/*.sql.gz
 !data/tableExtension.sql

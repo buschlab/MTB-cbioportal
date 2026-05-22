@@ -1,0 +1,96 @@
+{
+	"studies": [
+		{
+			"trialName": "EXAMPLE SNV Trial 1: MK-6482-015-Phase2",
+			"trialUrl": "https://clinicaltrials.gov/study/NCT04924075",
+			"inclusionCriteria": [
+				"EPAS1:MUT",
+				"FH:MUT",
+				"SDHA:MUT",
+				"SDHB:MUT",
+				"SDHC:MUT",
+				"SDHD:MUT",
+				"SDHAF2:MUT",
+				"EGLN1:MUT",
+				"EGLN2:MUT",
+				"MDH1:MUT",
+				"MDH2:MUT",
+				"ELOC:MUT"
+			],
+			"exclusionCriteria": [],
+			"min_age": 12
+		},
+		{
+			"trialName":"EXAMPLE SNV Trial 2: Soratram",
+			"trialUrl":"https://www.quickqueck.de/detail/228/",
+			"inclusionCriteria":[
+				"BRAF:G460R",
+				"BRAF:G466A",
+				"BRAF:G466R",
+				"BRAF:G466V",
+				"BRAF:G466E",
+				"BRAF:N581S",
+				"BRAF:N581T",
+				"BRAF:N581I",
+				"BRAF:N581D",
+				"BRAF:D594E",
+				"BRAF:D594G",
+				"BRAF:D594N",
+				"BRAF:D594H",
+				"BRAF:A598T",
+				"BRAF:G596R"],
+			"exclusionCriteria":[
+				"BRAF:V600E",
+				"BRAF:V600K",
+				"BRAF:V600D",
+				"BRAF:V600R",
+				"BRAF:V600M"
+			],
+			"min_age": 18
+		},
+		{
+			"trialName":"EXAMPLE CNV Trial: ECI830 Single Agent or in Combination",
+			"trialUrl":"https://clinicaltrials.gov/study/NCT06726148",
+			"inclusionCriteria":[
+				"CCNE1:AMP",
+				"CCNE1:GAIN"
+			],
+			"exclusionCriteria":[],
+			"min_age": 18
+		},
+		{
+			"trialName":"EXAMPLE Fusion Trial",
+			"trialUrl":"about:blank",
+			"inclusionCriteria":[
+				"TMPRSS2:ERG:FUSION",
+				"EML4:ALK:FUSION",
+				"ETV6:NTRK3:FUSION",
+				"FGFR3:TACC3:FUSION",
+				"SS18:SSX1:FUSION",
+				"BRAF:FUSION"
+			],
+			"exclusionCriteria":[],
+			"min_age": 50,
+			"max_age": 70
+		},
+		{
+			"trialName": "EXAMPLE Clinical Parameter Trial 1: HLA-A*02:01 Positive",
+			"trialUrl": "about:blank",
+			"inclusionCriteria": [
+				"Clinical:HLA:string:contains:A*02\\:01"
+			],
+			"exclusionCriteria": [],
+			"min_age": 18,
+			"max_age": 65
+		},
+		{
+			"trialName": "EXAMPLE Clinical Parameter Trial 2: TMB High",
+			"trialUrl": "about:blank",
+			"inclusionCriteria": [
+				"Clinical:CVR_TMB_SCORE:number:>:10"
+			],
+			"exclusionCriteria": [],
+			"max_age": 70
+		}
+	]
+}

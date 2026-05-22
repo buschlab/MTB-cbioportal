@@ -50,6 +50,7 @@ services:
       - ./../services/cbioproxy/lua_auth_config.lua:/etc/nginx/conf.d/lua_auth_config.lua:Z
       - ./../services/cbioproxy/lua_login_config.lua:/etc/nginx/conf.d/lua_login_config.lua:Z
       - ./../config/attributes.json:/attributes.json:Z
+      - ./../config/localCT.json:/localCT.json:Z
       - ./../data/tumorTypes.json:/tumorTypes.json:Z
       - ./../config/keycloak.pem:/keycloak.pem:z
     environment:
