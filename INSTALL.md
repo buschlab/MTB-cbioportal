@@ -1,213 +1,217 @@
-# Installation
+# Installation Guide
+
+This guide walks you through deploying MTB-cBioPortal. It is recommended to follow the sections in order:
+
+1. [Basic setup (no authentication)](#1-basic-setup-no-authentication) — get the system running first
+2. [Add HTTPS](#2-add-https) — required before enabling authentication
+3. [Add authentication (Keycloak)](#3-add-authentication-keycloak) — optional, requires HTTPS
+
+---
 
 ## Prerequisites
 
-1. A system with at least
-    - 4 CPU cores
-    - 10 GB of RAM
-    - 100GB of free disk space
-2. A container environment like Docker or Podman with support for Compose V3 (e.g. through `docker compose`, `podman-compose`, etc.)
+Before you start, make sure you have:
 
-The following steps will assume the usage of Docker  without an explicitly stated `sudo` command.
+- **Server requirements:** at least 4 CPU cores, 10 GB RAM, 100 GB free disk space
+- **Docker** with Compose V3 support (`docker compose`, `podman-compose`, etc.)
 
-Using HTTPS also requires:
+For HTTPS (required for authentication):
+- A reverse proxy (nginx recommended) to terminate SSL
+- A DNS name with a full-chain TLS certificate
 
-1. A reverse proxy that will terminate the HTTPS of the cBioPortal instance (preferrably nginx)
-2. A DNS name for cBioPortal with a **full chain** webserver certificate
+For Keycloak authentication:
+- A running Keycloak instance with HTTPS
+- The Keycloak server's full-chain certificate (`.pem`)
 
-Using Keycloak is only supported when using HTTPS but also requires:
+---
 
-1. A Keycloak instance with HTTPS
-2. An export of the Keycloaks **full chain** webserver certificate 
+## 1. Basic Setup (No Authentication)
 
-It is recommended to start with a setup without authentication and add that later on.
+### Clone the repository
 
-## Setup without authentication
-
-### 1. Clone the git repository
-
-```
+```bash
 git clone https://github.com/pm4onco/MTB-cbioportal.git
 cd MTB-cbioportal
 ```
 
-### 2. Derive environment from the default
+### Configure the environment
 
-```
+```bash
 cp .env.example .env
 ```
 
-Start editing the `.env` file with a text editor. By default the installation will point to a release with a fixed tag. Using the `latest` tag may provide more features but can also result in unexpected errors.
+Open `.env` in a text editor and review the following settings:
 
-Using OncoKB will all annotations requires a token that can be obtained [here](https://www.oncokb.org/apiAccess). This must be entered into the `.env` file as well as the `#` before the parameter `ONCOKB_URL` removed.
+| Setting | What to do |
+|---|---|
+| Image tag | Default is a fixed release tag recommended for stability. Switch to `latest` only if you need newer features and accept the risk of instability. |
+| Port | By default, the app runs on port `8080`. Change it here if needed. |
+| Database passwords | **Set these now.** They are written to config files during initialization. Changing them later requires manual database edits. |
+| OncoKB token | Optional. Obtain a token at [oncokb.org/apiAccess](https://www.oncokb.org/apiAccess), paste it into the file, and remove the `#` before `ONCOKB_URL`. |
+| Proxy | If your network requires a proxy, set `HTTPS_PROXY_PORT`. |
 
-By default MTB-cbioportal is exposed on port 8080, if that one is not available, please change it in the `.env` file.
+### Initialize configuration files
 
-If the network requires a proxy, please use the parameter `HTTPS_PROXY_PORT`.
-
-Please set the password for the databases **now** in the `.env` file. They will be written to config files and the databases will initialize with the provided value. Changing this afterwards must be done manually!
-
-### 3. Initialize config files
-
-```
+Without a proxy:
+```bash
 docker compose -f init.yml run --rm cbioportal
 ```
 
-for a network without proxy and
-
-```
+With a proxy:
+```bash
 docker compose -f init.yml run --rm -e https_proxy=http://proxyurl:port cbioportal
 ```
 
-for a network with proxy.
+This downloads the cBioPortal seed database and generates the database config files.
 
-This will download the SQL files to initalize the cBioPortal database and also initialize the config file for the database.
+> If you are not running as root, fix directory permissions after this step:
+> ```bash
+> sudo chmod 755 data/
+> ```
 
-The application's Docker container are running as `root` user. If you are not the `root` user, you may want to change the permissions of the `data/` directory with e.g.:
+### Start MTB-cBioPortal
 
-```
-sudo chmod 755 data/
-```
-
-### 4. Starting MTB-cbioportal
-
-Now start MTB-cBioPortal. 
-
-```
+```bash
 docker compose up -d
 ```
 
-If the system is limited in I/O capabilities, a timeout might occur. This timeout can be increased by using
-
-```
+If startup times out on a slow system:
+```bash
 COMPOSE_HTTP_TIMEOUT=200 docker compose up -d
 ```
 
-After the command is complete it should be possible to access cBioPortal on your machine using the webbrowser on the previously specified port.
-When using a remote machine and a rootless container environment like Podman, it might be neccessary to add the port to the firewall.
+Once running, open your browser and go to `http://localhost:8080` (or your configured port).
 
-### 5. Importing data
+> **Rootless Podman users:** You may need to open the port in your firewall manually.
 
-To import one of the provided test data sets use the following command
+### Import test data
 
-```
+To verify the setup with a sample dataset:
+
+```bash
 docker compose exec cbioportal metaImport.py -u http://cbioportal:8080 -s study/testpatient -o
 ```
 
-The adress here doesn't require any change, as it's being called from inside the container.
+The URL here is internal to the container, no changes needed.
 
-## Add HTTPS
+---
 
-Adding HTTPS to MTB-cBioPortal requires a reverse proxy that terminates HTTPS. 
+## 2. Add HTTPS
 
-It must set the following headers, so that URLs are being constructed correctly:
+HTTPS is handled by a **reverse proxy** in front of cBioPortal. MTB-cBioPortal does not terminate TLS itself.
+
+The reverse proxy must forward these headers so that URLs are generated correctly:
 
 ```
 X-Forwarded-Proto
 X-Forwarded-Port
 ```
 
-Using nginx is recommended but Apache or Traefik will also work. A very simple nginx config for this can look like this: 
+### Example nginx configuration
 
-```
-server
-{
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name mycbioportal.de;
+    ssl_certificate /certs/tls.pem;
+    ssl_certificate_key /certs/tls.key;
 
-	listen 443 ssl http2;
-	server_name mycbioportal.de;
-	ssl_certificate /certs/tls.pem;
-	ssl_certificate_key /certs/tls.key;
+    client_max_body_size 0;
 
-	client_max_body_size 0;
+    location / {
+        proxy_headers_hash_max_size 512;
+        proxy_headers_hash_bucket_size 64;
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Port $server_port;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-	location /
-	{
-
-		proxy_headers_hash_max_size 512;
-		proxy_headers_hash_bucket_size 64;
-		proxy_buffer_size 128k;
-		proxy_buffers 4 256k;
-		proxy_busy_buffers_size 256k;
-		proxy_set_header Host $http_host;
-		proxy_set_header X-Forwarded-Proto $scheme;
-		proxy_set_header X-Forwarded-Port $server_port;
-		proxy_set_header X-Real-IP $remote_addr;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-		proxy_pass http://mycbioportal:8080;
-
-	}
-
+        proxy_pass http://mycbioportal:8080;
+    }
 }
 
-server
-{
-
-	listen 80;
-	server_name mycbioportal.de;
-
-	return 301 https://mycbioportal.de$request_uri;
-
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    server_name mycbioportal.de;
+    return 301 https://mycbioportal.de$request_uri;
 }
 ```
 
-Adding the reverse proxy doesn't require a restart of cBioPortal and should 
+Replace `mycbioportal.de` with your actual domain. No restart of cBioPortal is needed after adding the proxy.
 
-## Add authentication
+---
 
-The final cherry on top is the authentication. For this a working cBioPortal instance with HTTPs is mandatory.
+## 3. Add Authentication (Keycloak)
 
-### 1. Set up Keycloak
+> **Requires a working HTTPS setup** (see section above).
 
-It is recommended to set up a dedicated realm in keycloak for cBioPortal, even though it is not neccessary. However, it is strongly advides not to use the master realm!
+Authentication is handled via Keycloak using OAuth2/OpenID Connect. The recommended approach is to set up Keycloak first, then configure MTB-cBioPortal to connect to it.
 
-#### Importing clients
+### 3.1 Configure Keycloak
 
-The following instructions assume that Keycloak runs at `https://mykeycloak.de` and cBioPortal runs at `https://mycbioportal.de`
+> It is strongly recommended to use a **dedicated realm** in Keycloak — do not use the master realm.
 
-Login to Keycloak, select the desired realm and click on *Clients*. Then hit the *Import client* button.
+These steps assume:
+- Keycloak is running at `https://mykeycloak.de`
+- cBioPortal is running at `https://mycbioportal.de`
 
-![Import Client 1](images/importClient1.png)
+#### Import the cBioPortal client
 
-Now hit the *Browse...* button and select the `cbioportal_client_export.json` from the `conf` directory of MTB-cbioportal.
+1. Log into Keycloak and select your realm.
+2. Go to **Clients** → **Import client**.
+3. Select the file `conf/cbioportal_client_export.json` from the MTB-cBioPortal directory.
+4. You may change the **Client ID** at this point if needed. Click **Save**.
 
-![Import Client 2](images/importClient2.png)
+![Import Client Step 1](images/importClient1.png)
+![Import Client Step 2](images/importClient2.png)
+![Import Client Step 3](images/importClient3.png)
 
+#### Configure the cBioPortal client URLs
 
-If desired the client *Cliend ID* can be changed now, the rest will be modified later.
-Click the save button.
+After importing, open the client and update:
 
-![Import Client 3](images/importClient3.png)
+- **Root URL** → `https://mycbioportal.de`
+- **Valid redirect URIs** → `https://mycbioportal.de/*`
+- **Admin URL** → `https://mycbioportal.de`
 
-The first step is configuring the cbioportal client. Click on the *Clients* section and open the cbioportal client.
+Click **Save**.
 
-Adjust the *Root URL*, *Valid redirect URIs* and *Admin URL*. Replace `https://mycbioportal.de` with the URL of your HTTPS-enabled cBioPortal. Make sure to keep the `/*` and the end of the redirect URI. If this is not set correctly Keycloak will refuse to offer a login prompt.
+![Client URL configuration](images/clientUrl.png)
 
-Click the *Save* button to save the new URLs. 
+> If the redirect URI is not set correctly, Keycloak will not show a login prompt.
 
-![Client URL](images/clientUrl.png)
+#### Import the FhirSpark client
 
-Repeat the same process with the `fhirspark_client_export.json` file.  The credentials will later be used as `KEYCLOAK_SECRET_FHIRSPARK` in step 3.
+Repeat the same import process using `conf/fhirspark_client_export.json`. Take note of the client secret, you will need it as `KEYCLOAK_SECRET_FHIRSPARK` in the next step.
 
-#### Exporting client roles
+#### Enable client roles in user info
 
-Navigate to to the *Client scopes* section of the realm and click *roles*.
+1. Go to **Client scopes** → **roles** → **Mappers** tab.
+2. Click on **client roles**.
+3. Make sure **Add to userinfo** is enabled.
 
-![Client roles 1](images/clientRoles1.png)
+![Client roles setup](images/clientRoles1.png)
+![Mappers tab](images/clientRoles2.png)
+![Add to userinfo](images/clientRoles3.png)
 
-Switch to the *Mappers* tab and hit *client roles*.
+---
 
-![Client roles 2](images/clientRoles2.png)
+### 3.2 Configure MTB-cBioPortal
 
-Make sure that *Add to userinfo* is enabled.
+Replace the placeholder certificate:
 
-![Client roles 3](images/clientRoles3.png)
-
-### 2. Setup MTB-cbioportal
-
-Replace the `keycloak.pem` file in the `config` directory with the webserver certificate from keycloak. 
-
+```bash
+cp /path/to/keycloak-fullchain.pem config/keycloak.pem
 ```
+
+Then edit the `.env` file and update the following values:
+
+```env
 LOGINREQUIRED=true
 AUTHENTICATE=oauth2
 EXCLUDE_AUTOCONFIG=
@@ -219,41 +223,49 @@ KEYCLOAK_CLIENT_FHIRSPARK=fhirspark
 KEYCLOAK_SECRET_FHIRSPARK=mysecret
 ```
 
-If data access via tokens to query the API (see docs [here](https://docs.cbioportal.org/web-api-and-clients/)) shall be enabled, set
+Replace the `mysecret` values with the actual client secrets from Keycloak.
 
-```
+To also enable **API token access** (see [cBioPortal API docs](https://docs.cbioportal.org/web-api-and-clients/)), add:
+
+```env
 DATA_ACCESS_TOKEN=oauth2
 ```
 
-Shut down all services using
-```
+Now restart cBioPortal with the updated configuration:
+
+```bash
 docker compose down
-```
-
-Run the initialization command again, as it will add the Keycloak certificate to the trusted castore for cBioPortal.
-
-```
 docker compose -f init.yml run --rm cbioportal
-```
-
-After that start cBioPortal again using
-```
 docker compose up -d
 ```
 
-### 3. Dumping portal info
+The init step is needed again to add the Keycloak certificate to cBioPortal's trusted certificate store.
 
-The import process contains checks against available datasources in cBioPortal. As the enabled authentication blocks direct API access the required data must be exported to disk. For this use the following command
+---
 
-```
+### 3.3 Update the data import command
+
+Because authentication blocks direct API access, you need to export portal info to disk first before importing studies:
+
+```bash
 docker compose exec cbioportal bash /cbioportal/dumpPortalInfo.sh
 ```
 
-Importing data must now use the provided portalinfo. The updated import command looks like this
-```
+Then use this updated import command (note the `-p` flag instead of `-u`):
+
+```bash
 docker compose exec cbioportal metaImport.py -p /cbioportal/portalinfo -s study/patient_example -o
 ```
 
+---
+
 ## Troubleshooting
 
-Will be constantly updated...
+This section will be updated as common issues are identified.
+
+If you run into a problem, check the container logs first:
+
+```bash
+docker compose logs cbioportal
+docker compose logs hapi-postgres
+```
