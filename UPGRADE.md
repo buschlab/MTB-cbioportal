@@ -31,11 +31,13 @@ Open `dump_hapi.sql` and verify it looks correct (it should start with SQL state
 
 ### Step 2 — Move your data to a safe location
 
-Move the backup files and any study or report data out of the MTB-cBioPortal directory:
+Move the backup files, study data, and your configuration files out of the MTB-cBioPortal directory:
 
 ```bash
-mv dump.sql dump_hapi.sql reports/ study/ /path/to/safe/location/
+mv dump.sql dump_hapi.sql reports/ study/ .env config/ /path/to/safe/location/
 ```
+
+> `config/` contains the Keycloak certificate (`keycloak.pem`) and other custom settings. `.env` holds all your environment variables including database passwords. Both will be lost with the directory if you skip this.
 
 ### Step 3 — Tear down the current installation
 
@@ -68,16 +70,18 @@ docker compose exec -T hapi-postgres psql -U hapiserver -d hapi < dump_hapi.sql
 
 ### Step 6 — Complete the setup
 
-From here, follow the standard installation steps starting from **Step 2 (Configure the environment)** in the [Installation Guide](./INSTALL.md).
-
-Copy your study and report data back:
+Start by restoring your configuration and data:
 
 ```bash
+cp /path/to/safe/location/.env .
+cp -r /path/to/safe/location/config/ .
 cp -r /path/to/safe/location/study/ .
 cp -r /path/to/safe/location/reports/ .
 ```
 
-Then reimport your studies as described in the [Installation Guide](./INSTALL.md#import-test-data).
+Then continue from **Step 3 (Initialize configuration files)** in the [Installation Guide](./INSTALL.md) — your `.env` is already in place, so you can skip Step 2.
+
+Reimport your studies once the stack is running, as described in the [Installation Guide](./INSTALL.md#import-test-data).
 
 ---
 
@@ -89,9 +93,7 @@ Then reimport your studies as described in the [Installation Guide](./INSTALL.md
 | HAPI FHIR database | ⚠️ Only if backed up | Follow Step 1 carefully |
 | cBioPortal session data | ❌ No | Regenerated on first login |
 | cBioPortal database | ❌ No | Reseeded automatically on start |
-| `.env` configuration | ✅ Yes | Copy it back after fresh clone |
-
-> Don't forget to copy your `.env` file back after the fresh clone in Step 4.
+| `.env` and `config/` | ⚠️ Only if backed up | Included in Step 2 backup |
 
 ---
 
